@@ -5,439 +5,255 @@
         static void Main(string[] args)
         {
             Console.WriteLine("APLIKACIJA ZA UPRAVLJANJE AERODROMOM");
-            chooseFromMainMenu();
+            ChooseFromMainMenu();
         }
 
-        static void chooseFromMainMenu()
+        static void ChooseFromMainMenu()
         {
-            bool isOver = true;
-
-            while (isOver)
+            while (true)
             {
+                Console.Write("\n1 - Putnici\n2 - Letovi\n3 - Avioni\n4 - Posada\n5 - Izlaz iz programa\n\nOdabir: ");
+
+                char choice = Console.ReadKey().KeyChar;
+
                 Console.WriteLine("");
 
-                showMainMenu();
-
-                Console.Write("Odabir: ");
-
-                if (int.TryParse(Console.ReadLine(), out int choice))
+                switch (choice)
                 {
-                    switch (choice)
-                    {
-                        case 1:
-                            chooseFromPassengersMenu();
-                            break;
-                        case 2:
-                            chooseFromFlightsMenu();
-                            break;
-                        case 3:
-                            chooseFromAirplanesMenu();
-                            break;
-                        case 4:
-                            chooseFromAircrewMenu();
-                            break;
-                        case 5:
-                            isOver = false;
-                            break;
-                        default:
-                            Console.WriteLine("Unos nije valjan");
-                            break;
-                    }
-                }
-
-                else
-                {
-                    Console.WriteLine("Unos nije valjan");
+                    case '1':
+                        ChooseFromPassengersMenu();
+                        break;
+                    case '2':
+                        ChooseFromFlightsMenu();
+                        break;
+                    case '3':
+                        ChooseFromAirplanesMenu();
+                        break;
+                    case '4':
+                        ChooseFromAircrewMenu();
+                        break;
+                    case '5':
+                        return;
+                    default:
+                        Console.WriteLine("Unos nije valjan");
+                        break;
                 }
             }
         }
 
-        static void showMainMenu()
+        static void ChooseFromPassengersMenu()
         {
-            Console.WriteLine("1 - Putnici");
-            Console.WriteLine("2 - Letovi");
-            Console.WriteLine("3 - Avioni");
-            Console.WriteLine("4 - Posada");
-            Console.WriteLine("5 - Izlaz iz programa");
-            Console.WriteLine("");
-        }
-
-        static void chooseFromPassengersMenu()
-        {
-            bool isOver = true;
-
-            while (isOver)
+            while (true)
             {
+                Console.Write("\n1 - Registracija\n2 - Prijava\n3 - Povratak na prethodni izbornik\n\nOdabir: ");
+
+                char choice = Console.ReadKey().KeyChar;
+
                 Console.WriteLine("");
 
-                showPassengersMenu();
-
-                Console.Write("Odabir: ");
-
-                if (int.TryParse(Console.ReadLine(), out int choice))
+                switch (choice)
                 {
-                    switch (choice)
-                    {
-                        case 1:
-                            break;
-                        case 2:
-                            chooseFromSignedPassengersMenu();
-                            break;
-                        case 3:
-                            isOver = false;
-                            break;
-                        default:
-                            Console.WriteLine("Unos nije valjan");
-                            break;
-                    }
-                }
-
-                else
-                {
-                    Console.WriteLine("Unos nije valjan");
+                    case '1':
+                        break;
+                    case '2':
+                        ChooseFromSignedPassengersMenu();
+                        break;
+                    case '3':
+                        return;
+                    default:
+                        Console.WriteLine("Unos nije valjan");
+                        break;
                 }
             }
         }
 
-        static void showPassengersMenu()
+        static void ChooseFromSignedPassengersMenu()
         {
-            Console.WriteLine("1 - Registracija");
-            Console.WriteLine("2 - Prijava");
-            Console.WriteLine("3 - Povratak na prethodni izbornik");
-            Console.WriteLine("");
-        }
-
-        static void chooseFromSignedPassengersMenu()
-        {
-            bool isOver = true;
-
-            while (isOver)
+            while (true)
             {
+                Console.Write("\n1 - Prikaz svih letova\n2 - Odabir leta\n3 - Pretraživanje letova\n4 - Otkazivanje leta\n5 - Povratak na prethodni izbornik\n\nOdabir: ");
+
+                char choice = Console.ReadKey().KeyChar;
+
                 Console.WriteLine("");
 
-                showSignedPassengersMenu();
-
-                Console.Write("Odabir: ");
-
-                if (int.TryParse(Console.ReadLine(), out int choice))
+                switch (choice)
                 {
-                    switch (choice)
-                    {
-                        case 1:
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            chooseFromSearchFlightsMenu();
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            isOver = false;
-                            break;
-                        default:
-                            Console.WriteLine("Unos nije valjan");
-                            break;
-                    }
-                }
-
-                else
-                {
-                    Console.WriteLine("Unos nije valjan");
+                    case '1':
+                        break;
+                    case '2':
+                        break;
+                    case '3':
+                        ChooseFromSearchFlightsMenu();
+                        break;
+                    case '4':
+                        break;
+                    case '5':
+                        return;
+                    default:
+                        Console.WriteLine("Unos nije valjan");
+                        break;
                 }
             }
         }
 
-        static void showSignedPassengersMenu()
+        static void ChooseFromSearchFlightsMenu()
         {
-            Console.WriteLine("1 - Prikaz svih letova");
-            Console.WriteLine("2 - Odabir leta");
-            Console.WriteLine("3 - Pretraživanje letova");
-            Console.WriteLine("4 - Otkazivanje leta");
-            Console.WriteLine("5 - Povratak na prethodni izbornik");
-            Console.WriteLine("");
-        }
-
-        static void chooseFromSearchFlightsMenu()
-        {
-            bool isOver = true;
-
-            while (isOver)
+            while (true)
             {
+                Console.Write("\nPretraživanje letova:\na - Po ID-u\nb - Po nazivu\n\nOdabir: ");
+
+                char choice = Console.ReadKey().KeyChar;
+
                 Console.WriteLine("");
 
-                showSearchFlightsMenu();
-
-                Console.Write("Odabir: ");
-
-                if (char.TryParse((Console.ReadLine() ?? "").ToLower(), out char choice))
+                switch (choice)
                 {
-                    switch (choice)
-                    {
-                        case 'a':
-                            isOver = false;
-                            break;
-                        case 'b':
-                            isOver = false;
-                            break;
-                        default:
-                            Console.WriteLine("Unos nije valjan");
-                            break;
-                    }
-                }
-
-                else
-                {
-                    Console.WriteLine("Unos nije valjan");
+                    case 'a':
+                        return;
+                    case 'b':
+                        return;
+                    default:
+                        Console.WriteLine("Unos nije valjan");
+                        break;
                 }
             }
         }
 
-        static void showSearchFlightsMenu()
+        static void ChooseFromFlightsMenu()
         {
-            Console.WriteLine("Pretraživanje letova:");
-            Console.WriteLine("a - Po ID-u");
-            Console.WriteLine("b - Po nazivu");
-            Console.WriteLine("");
-        }
-
-        static void chooseFromFlightsMenu()
-        {
-            bool isOver = true;
-
-            while (isOver)
+            while (true)
             {
+                Console.Write("\n1 - Prikaz svih letova\n2 - Dodavanje leta\n3 - Pretraživanje letova\n4 - Uređivanje leta\n5 - Brisanje leta\n6 - Povratak na prethodni izbornik\n\nOdabir: ");
+
+                char choice = Console.ReadKey().KeyChar;
+
                 Console.WriteLine("");
 
-                showFightsMenu();
-
-                Console.Write("Odabir: ");
-
-                if (int.TryParse(Console.ReadLine(), out int choice))
+                switch (choice)
                 {
-                    switch (choice)
-                    {
-                        case 1:
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            chooseFromSearchFlightsMenu();
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            break;
-                        case 6:
-                            isOver = false;
-                            break;
-                        default:
-                            Console.WriteLine("Unos nije valjan");
-                            break;
-                    }
-                }
-
-                else
-                {
-                    Console.WriteLine("Unos nije valjan");
+                    case '1':
+                        break;
+                    case '2':
+                        break;
+                    case '3':
+                        ChooseFromSearchFlightsMenu();
+                        break;
+                    case '4':
+                        break;
+                    case '5':
+                        break;
+                    case '6':
+                        return;
+                    default:
+                        Console.WriteLine("Unos nije valjan");
+                        break;
                 }
             }
         }
 
-        static void showFightsMenu()
+        static void ChooseFromAirplanesMenu()
         {
-            Console.WriteLine("1 - Prikaz svih letova");
-            Console.WriteLine("2 - Dodavanje leta");
-            Console.WriteLine("3 - Pretraživanje letova");
-            Console.WriteLine("4 - Uređivanje leta");
-            Console.WriteLine("5 - Brisanje leta");
-            Console.WriteLine("6 - Povratak na prethodni izbornik");
-            Console.WriteLine("");
-        }
-
-        static void chooseFromAirplanesMenu()
-        {
-            bool isOver = true;
-
-            while (isOver)
+            while (true)
             {
+                Console.Write("\n1 - Prikaz svih aviona\n2 - Dodavanje novog aviona\n3 - Pretraživanje aviona\n4 - Brisanje aviona\n5 - Povratak na glavni izbornik\n\nOdabir: ");
+
+                char choice = Console.ReadKey().KeyChar;
+
                 Console.WriteLine("");
 
-                showAirplanesMenu();
-
-                Console.Write("Odabir: ");
-
-                if (int.TryParse(Console.ReadLine(), out int choice))
+                switch (choice)
                 {
-                    switch (choice)
-                    {
-                        case 1:
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            chooseFromSearchAirplanesMenu();
-                            break;
-                        case 4:
-                            chooseFromDeleteAirplanesMenu();
-                            break;
-                        case 5:
-                            isOver = false;
-                            break;
-                        default:
-                            Console.WriteLine("Unos nije valjan");
-                            break;
-                    }
-                }
-
-                else
-                {
-                    Console.WriteLine("Unos nije valjan");
+                    case '1':
+                        break;
+                    case '2':
+                        break;
+                    case '3':
+                        ChooseFromSearchAirplanesMenu();
+                        break;
+                    case '4':
+                        ChooseFromDeleteAirplanesMenu();
+                        break;
+                    case '5':
+                        return;
+                    default:
+                        Console.WriteLine("Unos nije valjan");
+                        break;
                 }
             }
         }
 
-        static void showAirplanesMenu()
+        static void ChooseFromSearchAirplanesMenu()
         {
-            Console.WriteLine("1 - Prikaz svih aviona");
-            Console.WriteLine("2 - Dodavanje novog aviona");
-            Console.WriteLine("3 - Pretraživanje aviona");
-            Console.WriteLine("4 - Brisanje aviona");
-            Console.WriteLine("5 - Povratak na prethodni izbornik");
-            Console.WriteLine("");
-        }
-
-        static void chooseFromSearchAirplanesMenu()
-        {
-            bool isOver = true;
-
-            while (isOver)
+            while (true)
             {
+                Console.Write("\nPretraživanje aviona:\na - Po ID-u\nb - Po nazivu\n\nOdabir: ");
+
+                char choice = Console.ReadKey().KeyChar;
+
                 Console.WriteLine("");
 
-                showSearchAirplanesMenu();
-
-                Console.Write("Odabir: ");
-
-                if (char.TryParse((Console.ReadLine() ?? "").ToLower(), out char choice))
+                switch (choice)
                 {
-                    switch (choice)
-                    {
-                        case 'a':
-                            isOver = false;
-                            break;
-                        case 'b':
-                            isOver = false;
-                            break;
-                        default:
-                            Console.WriteLine("Unos nije valjan");
-                            break;
-                    }
-                }
-
-                else
-                {
-                    Console.WriteLine("Unos nije valjan");
+                    case 'a':
+                        return;
+                    case 'b':
+                        return;
+                    default:
+                        Console.WriteLine("Unos nije valjan");
+                        break;
                 }
             }
         }
 
-        static void showSearchAirplanesMenu()
+        static void ChooseFromDeleteAirplanesMenu()
         {
-            Console.WriteLine("Pretraživanje aviona:");
-            Console.WriteLine("a - Po ID-u");
-            Console.WriteLine("b - Po nazivu");
-            Console.WriteLine("");
-        }
-
-        static void chooseFromDeleteAirplanesMenu()
-        {
-            bool isOver = true;
-
-            while (isOver)
+            while (true)
             {
+                Console.Write("\nBrisanje aviona:\na - Po ID-u\nb - Po nazivu\n\nOdabir: ");
+
+                char choice = Console.ReadKey().KeyChar;
+
                 Console.WriteLine("");
 
-                showDeleteAirplanesMenu();
-
-                Console.Write("Odabir: ");
-
-                if (char.TryParse((Console.ReadLine() ?? "").ToLower(), out char choice))
+                switch (choice)
                 {
-                    switch (choice)
-                    {
-                        case 'a':
-                            isOver = false;
-                            break;
-                        case 'b':
-                            isOver = false;
-                            break;
-                        default:
-                            Console.WriteLine("Unos nije valjan");
-                            break;
-                    }
-                }
-
-                else
-                {
-                    Console.WriteLine("Unos nije valjan");
+                    case 'a':
+                        return;
+                    case 'b':
+                        return;
+                    default:
+                        Console.WriteLine("Unos nije valjan");
+                        break;
                 }
             }
         }
 
-        static void showDeleteAirplanesMenu()
+        static void ChooseFromAircrewMenu()
         {
-            Console.WriteLine("Brisanje aviona:");
-            Console.WriteLine("a - Po ID-u");
-            Console.WriteLine("b - Po nazivu");
-            Console.WriteLine("");
-        }
-
-        static void chooseFromAircrewMenu()
-        {
-            bool isOver = true;
-
-            while (isOver)
+            while (true)
             {
+                Console.Write("\n1 - Prikaz svih posada\n2 - Kreiranje nove posade\n3 - Dodavanje nove osobe\n4 - Povratak na prethodni izbornik\n\nOdabir: ");
+
+                char choice = Console.ReadKey().KeyChar;
+
                 Console.WriteLine("");
 
-                showAircrewMenu();
-
-                Console.Write("Odabir: ");
-
-                if (int.TryParse(Console.ReadLine(), out int choice))
+                switch (choice)
                 {
-                    switch (choice)
-                    {
-                        case 1:
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                            isOver = false;
-                            break;
-                        default:
-                            Console.WriteLine("Unos nije valjan");
-                            break;
-                    }
-                }
-
-                else
-                {
-                    Console.WriteLine("Unos nije valjan");
+                    case '1':
+                        break;
+                    case '2':
+                        break;
+                    case '3':
+                        break;
+                    case '4':
+                        return;
+                    default:
+                        Console.WriteLine("Unos nije valjan");
+                        break;
                 }
             }
-        }
-
-        static void showAircrewMenu()
-        {
-            Console.WriteLine("1 - Prikaz svih posada");
-            Console.WriteLine("2 - Kreiranje nove posade");
-            Console.WriteLine("3 - Dodavanje nove osobe");
-            Console.WriteLine("4 - Povratak na prethodni izbornik");
-            Console.WriteLine("");
         }
     }
 }
