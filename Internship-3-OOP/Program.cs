@@ -1,4 +1,6 @@
-﻿namespace Internship_3_OOP
+﻿using Internship_3_OOP.Classes;
+
+namespace Internship_3_OOP
 {
     internal class Program
     {
@@ -54,6 +56,7 @@
                 switch (choice)
                 {
                     case '1':
+                        RegisterNewPassenger();
                         break;
                     case '2':
                         ChooseFromSignedPassengersMenu();
@@ -254,6 +257,41 @@
                         break;
                 }
             }
+        }
+
+        static void RegisterNewPassenger()
+        {
+            Console.WriteLine("\nREGISTRACIJA NOVOG PUTNIKA\n");
+
+            string email = Helper.ValidateEmail();
+            string password = Helper.ValidatePassword();
+            string first_name = Helper.ValidateName("ime");
+            string last_name = Helper.ValidateName("prezime");
+            DateOnly birth_date = Helper.ValidateBirthDate();
+
+            AddNewPassenger(email, password, first_name, last_name, birth_date);
+        }
+
+        static void AddNewPassenger(string email, string password, string first_name, string last_name, DateOnly birth_date)
+        {
+            Console.WriteLine("Bok, {0}. Zelite li dovrsiti proces registracije? (DA/NE)", first_name);
+
+            if (Helper.CheckInput())
+            {
+                Passenger.Passengers.Add(new Passenger(first_name, last_name, birth_date, email, password));
+                Console.WriteLine("Proces registracije je dovrsen\n");
+            }
+
+            else
+            {
+                Console.WriteLine("Proces registracije je prekinut\n");
+            }
+
+            Console.Write("Pritisnite bilo koju tipku za nastavak... ");
+            Console.ReadKey(true);
+            Console.Clear();
+
+            return;
         }
     }
 }
