@@ -3,17 +3,25 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Internship_3_OOP.Classes
 {
-    public class Helper
+    internal class Helper
     {
         public static void Initialize()
         {
             InitializeFlights();
+            InitializeAirplanes();
         }
 
         public static void InitializeFlights()
         {
             Flight.Flights.Add(new Flight("LH256", new DateTime(2025, 11, 19, 14, 30, 0), new DateTime(2025, 11, 19, 18, 45, 0), 1200));
             Flight.Flights.Add(new Flight("AA100", new DateTime(2025, 11, 20, 9, 0, 0), new DateTime(2025, 11, 20, 11, 30, 0), 800));
+        }
+
+        public static void InitializeAirplanes()
+        {
+            Airplane.Airplanes.Add(new Airplane("Boeing 737", new DateOnly(2015, 6, 12), 1200));
+            Airplane.Airplanes.Add(new Airplane("Airbus A320", new DateOnly(2018, 3, 25), 950));
+            Airplane.Airplanes.Add(new Airplane("Embraer E195", new DateOnly(2020, 11, 5), 600));
         }
 
         public static Guid GenerateGuid()
@@ -252,6 +260,5 @@ namespace Internship_3_OOP.Classes
 
             else return false;
         }
-
     }
 }

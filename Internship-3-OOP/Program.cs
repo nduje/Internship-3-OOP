@@ -1,4 +1,5 @@
 ﻿using Internship_3_OOP.Classes;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Internship_3_OOP
 {
@@ -171,6 +172,7 @@ namespace Internship_3_OOP
                 switch (choice)
                 {
                     case '1':
+                        ShowAirplanes();
                         break;
                     case '2':
                         break;
@@ -343,6 +345,20 @@ namespace Internship_3_OOP
             Console.Clear();
 
             return;
+        }
+
+        static void ShowAirplanes()
+        {
+            Console.WriteLine("\n| {0, -36} | {1, -16} | {2, -18} | {3, -11} |\n", "ID", "Naziv", "Godina proizvodnje", "Broj letova");
+
+            foreach (var airplane in Airplane.Airplanes)
+            {
+                Console.WriteLine("| {0, -36} | {1, -16} | {2, -18} | {3, -11} |\n", airplane.Id, airplane.Name, airplane.ProductionYear.Year, airplane.TotalFlights);
+            }
+
+            Console.Write("Pritisnite bilo koju tipku za nastavak... ");
+            Console.ReadKey(true);
+            Console.Clear();
         }
     }
 }

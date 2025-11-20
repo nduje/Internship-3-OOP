@@ -1,6 +1,6 @@
 ﻿namespace Internship_3_OOP.Classes
 {
-    public class Person
+    internal class Person
     {
         protected string FirstName { get; set; }
         protected string LastName { get; set; }
