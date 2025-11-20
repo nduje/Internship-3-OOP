@@ -6,6 +6,7 @@ namespace Internship_3_OOP
     {
         static void Main(string[] args)
         {
+            Helper.Initialize();
             Console.WriteLine("APLIKACIJA ZA UPRAVLJANJE AERODROMOM");
             ChooseFromMainMenu();
         }
@@ -136,6 +137,7 @@ namespace Internship_3_OOP
                 switch (choice)
                 {
                     case '1':
+                        ShowFlights();
                         break;
                     case '2':
                         break;
@@ -292,6 +294,20 @@ namespace Internship_3_OOP
             Console.Clear();
 
             return;
+        }
+
+        static void ShowFlights()
+        {
+            Console.WriteLine("\n| {0, -36} | {1, -7} | {2, -20} | {3, -20} | {4, -10} | {5, -17} |\n", "ID", "Naziv", "Datum polaska", "Datum dolaska", "Udaljenost", "Vrijeme putovanja");
+
+            foreach (var flight in Flight.Flights)
+            {
+                Console.WriteLine("| {0, -36} | {1, -7} | {2, -20} | {3, -20} | {4, -10:F2} | {5, -17} |\n", flight.Id, flight.Number, flight.DepartureTime, flight.ArrivalTime, (flight.Distance + "km"), (flight.Duration.Hours + "h " + flight.Duration.Minutes + "min"));
+            }
+
+            Console.Write("Pritisnite bilo koju tipku za nastavak... ");
+            Console.ReadKey(true);
+            Console.Clear();
         }
     }
 }

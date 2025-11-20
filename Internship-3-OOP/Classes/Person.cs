@@ -12,7 +12,7 @@
             FirstName = first_name;
             LastName = last_name;
             BirthDate = birth_date;
-            Id = Guid.NewGuid();
+            Id = Helper.GenerateGuid();
         }
     }
 }

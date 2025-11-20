@@ -4,6 +4,22 @@ namespace Internship_3_OOP.Classes
 {
     public class Helper
     {
+        public static void Initialize()
+        {
+            InitializeFlights();
+        }
+
+        public static void InitializeFlights()
+        {
+            Flight.Flights.Add(new Flight("LH256", new DateTime(2025, 11, 19, 14, 30, 0), new DateTime(2025, 11, 19, 18, 45, 0), 1200, 180));
+            Flight.Flights.Add(new Flight("AA100", new DateTime(2025, 11, 20, 9, 0, 0), new DateTime(2025, 11, 20, 11, 30, 0), 800, 120));
+        }
+
+        public static Guid GenerateGuid()
+        {
+            return Guid.NewGuid();
+        }
+
         public static string ValidateEmail()
         {
             string email;
@@ -145,6 +161,13 @@ namespace Internship_3_OOP.Classes
                 return true;
 
             else return false;
+        }
+
+        public static bool IsFlightNumberValid(string number)
+        {
+            var pattern = @"^[A-Z]{2}\d{1,4}[A-Z]?$";
+
+            return Regex.IsMatch(number, pattern);
         }
     }
 }
