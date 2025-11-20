@@ -235,6 +235,52 @@ namespace Internship_3_OOP.Classes
             }
         }
 
+        public static string ValidateAirplaneName()
+        {
+            string name;
+
+            do
+            {
+                Console.Write("Unesite valjano ime aviona (npr. Boeing 737): ");
+                name = Console.ReadLine() ?? "";
+            } while (string.IsNullOrEmpty(name) || !Helper.IsAirplaneNameValid(name));
+
+            Console.WriteLine("");
+
+            return name;
+        }
+
+        public static bool IsAirplaneNameValid(string name)
+        {
+            var pattern = @"^[A-Za-z0-9\s\.-]+$";
+
+            return Regex.IsMatch(name, pattern);
+        }
+
+        public static int ValidateTotalFlights()
+        {
+            while (true)
+            {
+                Console.Write("Unesite ukupan broj odrađenih letova: ");
+
+                if (!int.TryParse(Console.ReadLine(), out int total_flights))
+                {
+                    Console.WriteLine("Unos nije valjan\n");
+                    continue;
+                }
+
+                if (total_flights < 0)
+                {
+                    Console.WriteLine("Broj ne može negativan broj\n");
+                    continue;
+                }
+
+
+                Console.WriteLine("");
+                return total_flights;
+            }
+        }
+
         public static bool CheckInput()
         {
             string input = "";

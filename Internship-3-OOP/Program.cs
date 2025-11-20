@@ -175,6 +175,7 @@ namespace Internship_3_OOP
                         ShowAirplanes();
                         break;
                     case '2':
+                        CreateNewAirplane();
                         break;
                     case '3':
                         ChooseFromSearchAirplanesMenu();
@@ -359,6 +360,39 @@ namespace Internship_3_OOP
             Console.Write("Pritisnite bilo koju tipku za nastavak... ");
             Console.ReadKey(true);
             Console.Clear();
+        }
+
+        static void CreateNewAirplane()
+        {
+            Console.WriteLine("\nDODAVANJE NOVOG AVIONA\n");
+
+            string name = Helper.ValidateAirplaneName();
+            DateOnly production_year = Helper.ValidateDate("proizvodnje");
+            int total_flights = Helper.ValidateTotalFlights();
+
+            AddNewFlight(name, production_year, total_flights);
+        }
+
+        static void AddNewFlight(string name, DateOnly production_year, int total_flights)
+        {
+            Console.Write("Zelite li dovrsiti proces dodavanja aviona {0}? (DA/NE) ", name);
+
+            if (Helper.CheckInput())
+            {
+                Airplane.Airplanes.Add(new Airplane(name, production_year, total_flights));
+                Console.WriteLine("Proces dodavanja aviona {0} je dovrsen\n", name);
+            }
+
+            else
+            {
+                Console.WriteLine("Proces dodavanja aviona {0} je prekinut\n", name);
+            }
+
+            Console.Write("Pritisnite bilo koju tipku za nastavak... ");
+            Console.ReadKey(true);
+            Console.Clear();
+
+            return;
         }
     }
 }
