@@ -9,8 +9,8 @@ namespace Internship_3_OOP.Classes
 {
     internal class Member : Person
     {
-        Genders Gender;
-        Roles Role;
+        public Genders Gender;
+        public Roles Role;
         public static List<Member> Members = new List<Member>();
 
         public Member(string first_name, string last_name, DateOnly birth_date, Genders gender, Roles role) : base(first_name, last_name, birth_date)

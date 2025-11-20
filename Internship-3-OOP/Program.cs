@@ -251,6 +251,7 @@ namespace Internship_3_OOP
                 switch (choice)
                 {
                     case '1':
+                        ShowAircrew();
                         break;
                     case '2':
                         break;
@@ -393,6 +394,32 @@ namespace Internship_3_OOP
             Console.Clear();
 
             return;
+        }
+
+        static void ShowAircrew()
+        {
+            Console.WriteLine("\n{0, -16} {1}\n", "Naziv posade", "Lista clanova");
+
+            foreach (var aircrew in Aircrew.Aircrews)
+            {
+                string members = string.Join(", ", aircrew.Members.Select(m => m.Role + " " + m.GetLastName()));
+                Console.WriteLine("{0, -16} {1}\n", aircrew.Name, members);
+                ShowMembers(aircrew);
+            }
+
+            Console.Write("Pritisnite bilo koju tipku za nastavak... ");
+            Console.ReadKey(true);
+            Console.Clear();
+        }
+
+        static void ShowMembers(Aircrew aircrew)
+        {
+            Console.WriteLine("{0, -16} {1, -16} {2, -16} {3, -16} {4}\n", "Ime", "Prezime", "Pozicija", "Spol", "Datum rođenja");
+
+            foreach (var member in aircrew.Members)
+            {
+                Console.WriteLine("{0, -16} {1, -16} {2, -16} {3, -16} {4}\n", member.GetFirstName(), member.GetLastName(), member.Role, member.Gender, member.GetBirthDate());
+            }
         }
     }
 }

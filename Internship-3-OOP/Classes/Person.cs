@@ -14,5 +14,25 @@
             BirthDate = birth_date;
             Id = Helper.GenerateGuid();
         }
+
+        public string GetFirstName()
+        {
+            return FirstName;
+        }
+
+        public string GetLastName()
+        {
+            return LastName;
+        }
+
+        public DateOnly GetBirthDate()
+        {
+            return BirthDate;
+        }
+
+        public Guid GetId()
+        {
+            return Id;
+        }
     }
 }
