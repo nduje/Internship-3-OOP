@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Internship_3_OOP.Classes
 {
@@ -11,8 +12,8 @@ namespace Internship_3_OOP.Classes
 
         public static void InitializeFlights()
         {
-            Flight.Flights.Add(new Flight("LH256", new DateTime(2025, 11, 19, 14, 30, 0), new DateTime(2025, 11, 19, 18, 45, 0), 1200, 180));
-            Flight.Flights.Add(new Flight("AA100", new DateTime(2025, 11, 20, 9, 0, 0), new DateTime(2025, 11, 20, 11, 30, 0), 800, 120));
+            Flight.Flights.Add(new Flight("LH256", new DateTime(2025, 11, 19, 14, 30, 0), new DateTime(2025, 11, 19, 18, 45, 0), 1200));
+            Flight.Flights.Add(new Flight("AA100", new DateTime(2025, 11, 20, 9, 0, 0), new DateTime(2025, 11, 20, 11, 30, 0), 800));
         }
 
         public static Guid GenerateGuid()
@@ -93,6 +94,28 @@ namespace Internship_3_OOP.Classes
             }
         }
 
+        public static string ValidateFlightNumber()
+        {
+            string number;
+
+            do
+            {
+                Console.Write("Unesite valjani broj leta (npr. LA205B - 2 slova, 1 do 4 znamenke, opcionalno A ili B): ");
+                number = Console.ReadLine() ?? "";
+            } while (string.IsNullOrEmpty(number) || !Helper.IsFlightNumberValid(number));
+
+            Console.WriteLine("");
+
+            return number;
+        }
+
+        public static bool IsFlightNumberValid(string number)
+        {
+            var pattern = @"^[A-Z]{2}\d{1,4}[AB]?$";
+
+            return Regex.IsMatch(number, pattern);
+        }
+
         public static DateOnly ValidateBirthDate()
         {
             DateOnly birth_date;
@@ -137,6 +160,73 @@ namespace Internship_3_OOP.Classes
             }
         }
 
+        public static DateTime ValidateDateTime(string type)
+        {
+            return ValidateDate(type).ToDateTime(ValidateTime(type));
+        }
+
+        public static DateOnly ValidateDate(string type)
+        {
+            while (true)
+            {
+                Console.Write("Unesite datum {0} (npr. 01.01.2025.): ", type);
+
+                if (DateOnly.TryParseExact(Console.ReadLine() ?? "", "dd.MM.yyyy.", out DateOnly date))
+                {
+                    Console.WriteLine("");
+                    return date;
+                }
+
+                else
+                {
+                    Console.WriteLine("Neispravan format datuma\n");
+                }
+            }
+        }
+
+        public static TimeOnly ValidateTime(string type)
+        {
+            while (true)
+            {
+                Console.Write("Unesite vrijeme {0} (npr. 16:15): ", type);
+
+                if (TimeOnly.TryParseExact(Console.ReadLine() ?? "", "HH:mm", out TimeOnly time))
+                {
+                    Console.WriteLine("");
+                    return time;
+                }
+
+                else
+                {
+                    Console.WriteLine("Neispravan format vremena\n");
+                }
+            }
+        }
+
+        public static double ValidateDistance()
+        {
+            while (true)
+            {
+                Console.Write("Unesite udaljenost između polazišta i dolazišta (u kilometrima): ");
+
+                if (!double.TryParse(Console.ReadLine(), out double distance))
+                {
+                    Console.WriteLine("Unos nije valjan\n");
+                    continue;
+                }
+
+                if (distance <= 0)
+                {
+                    Console.WriteLine("Udaljenost ne može biti nula ili negativan broj\n");
+                    continue;
+                }
+
+
+                Console.WriteLine("");
+                return distance;
+            }
+        }
+
         public static bool CheckInput()
         {
             string input = "";
@@ -163,11 +253,5 @@ namespace Internship_3_OOP.Classes
             else return false;
         }
 
-        public static bool IsFlightNumberValid(string number)
-        {
-            var pattern = @"^[A-Z]{2}\d{1,4}[A-Z]?$";
-
-            return Regex.IsMatch(number, pattern);
-        }
     }
 }

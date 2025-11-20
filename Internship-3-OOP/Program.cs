@@ -140,6 +140,7 @@ namespace Internship_3_OOP
                         ShowFlights();
                         break;
                     case '2':
+                        CreateNewFlight();
                         break;
                     case '3':
                         ChooseFromSearchFlightsMenu();
@@ -276,7 +277,7 @@ namespace Internship_3_OOP
 
         static void AddNewPassenger(string email, string password, string first_name, string last_name, DateOnly birth_date)
         {
-            Console.WriteLine("Bok, {0}. Zelite li dovrsiti proces registracije? (DA/NE)", first_name);
+            Console.Write("Bok, {0}. Zelite li dovrsiti proces registracije? (DA/NE) ", first_name);
 
             if (Helper.CheckInput())
             {
@@ -308,6 +309,40 @@ namespace Internship_3_OOP
             Console.Write("Pritisnite bilo koju tipku za nastavak... ");
             Console.ReadKey(true);
             Console.Clear();
+        }
+
+        static void CreateNewFlight()
+        {
+            Console.WriteLine("\nDODAVANJE NOVOG LETA\n");
+
+            string number = Helper.ValidateFlightNumber();
+            DateTime departure_time = Helper.ValidateDateTime("polaska");
+            DateTime arrival_time = Helper.ValidateDateTime("dolaska");
+            double distance = Helper.ValidateDistance();
+
+            AddNewFlight(number, departure_time, arrival_time, distance);
+        }
+
+        static void AddNewFlight(string number, DateTime departure_time, DateTime arrival_time, double distance)
+        {
+            Console.Write("Zelite li dovrsiti proces dodavanja leta broj {0}? (DA/NE) ", number);
+
+            if (Helper.CheckInput())
+            {
+                Flight.Flights.Add(new Flight(number, departure_time, arrival_time, distance));
+                Console.WriteLine("Proces dodavanja leta broj {0} je dovrsen\n", number);
+            }
+
+            else
+            {
+                Console.WriteLine("Proces dodavanja leta broj {0} je prekinut\n", number);
+            }
+
+            Console.Write("Pritisnite bilo koju tipku za nastavak... ");
+            Console.ReadKey(true);
+            Console.Clear();
+
+            return;
         }
     }
 }

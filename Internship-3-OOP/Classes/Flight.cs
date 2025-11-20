@@ -8,10 +8,9 @@
         public DateTime ArrivalTime { get; set; }
         public double Distance { get; set; }
         public TimeSpan Duration { get; set; }
-        public int Capacity { get; set; }
         public static List<Flight> Flights = new List<Flight>();
 
-        public Flight(string number, DateTime departureTime, DateTime arrivalTime, double distance, int capacity)
+        public Flight(string number, DateTime departureTime, DateTime arrivalTime, double distance)
         {
             Id = Guid.NewGuid();
             Number = number;
@@ -19,7 +18,6 @@
             ArrivalTime = arrivalTime;
             Distance = distance;
             Duration = CalculateDuration();
-            Capacity = capacity;
         }
 
         private TimeSpan CalculateDuration()
