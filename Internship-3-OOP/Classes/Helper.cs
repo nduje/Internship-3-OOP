@@ -23,6 +23,7 @@ namespace Internship_3_OOP.Classes
         private static void InitializeAirplanes()
         {
             Airplane.Airplanes.Add(new Airplane("Boeing 737", new DateOnly(2015, 6, 12), 1200));
+            Airplane.Airplanes.Add(new Airplane("Boeing 737", new DateOnly(2012, 3, 6), 1200));
             Airplane.Airplanes.Add(new Airplane("Airbus A320", new DateOnly(2018, 3, 25), 950));
             Airplane.Airplanes.Add(new Airplane("Embraer E195", new DateOnly(2020, 11, 5), 600));
         }

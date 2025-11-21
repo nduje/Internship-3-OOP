@@ -238,8 +238,10 @@ namespace Internship_3_OOP
                 switch (choice)
                 {
                     case 'a':
+                        DeleteAirplaneById();
                         return;
                     case 'b':
+                        DeleteAirplaneByName();
                         return;
                     default:
                         Console.WriteLine("Unos nije valjan");
@@ -427,9 +429,9 @@ namespace Internship_3_OOP
                     continue;
                 }
 
-                Airplane? airplane = Airplane.Airplanes.Find(a => a.Name == name);
+                List<Airplane> airplanes = Airplane.Airplanes.Where(a => a.Name == name).ToList();
 
-                if (airplane == null)
+                if (airplanes == null)
                 {
 
                     Console.WriteLine("Avion s nazivom {0} ne postoji\n", name);
@@ -438,12 +440,66 @@ namespace Internship_3_OOP
                 }
 
                 Console.WriteLine("\n| {0, -36} | {1, -16} | {2, -18} | {3, -11} |", "ID", "Naziv", "Godina proizvodnje", "Broj letova");
-                Console.WriteLine("| {0, -36} | {1, -16} | {2, -18} | {3, -11} |\n", airplane.Id, airplane.Name, airplane.ProductionYear.Year, airplane.TotalFlights);
+
+                foreach (var airplane in airplanes)
+                {
+                    Console.WriteLine("| {0, -36} | {1, -16} | {2, -18} | {3, -11} |", airplane.Id, airplane.Name, airplane.ProductionYear.Year, airplane.TotalFlights);
+                }
+
+                Console.WriteLine("");
 
                 PendingUser();
 
                 return;
             }
+        }
+
+        static void DeleteAirplaneById()
+        {
+            Console.WriteLine("\nBRISANJE AVIONA PO IDENTIFIKATORU\n");
+
+            while (true)
+            {
+                Console.Write("Odaberite avion (unesite ID): ");
+
+                if (!Guid.TryParse(Console.ReadLine(), out Guid id))
+                {
+                    Console.WriteLine("Unos nije valjan\n");
+                    continue;
+                }
+
+                Airplane? airplane = Airplane.Airplanes.Find(a => a.Id == id);
+
+                if (airplane == null)
+                {
+
+                    Console.WriteLine("Avion s identifikatorom {0} ne postoji\n", id);
+                    PendingUser();
+                    return;
+                }
+
+                Console.Write("\nZelite li dovrsiti proces brisanja aviona {0} ({1})? (DA/NE) ", airplane.Name, airplane.Id);
+
+                if (Helper.CheckInput())
+                {
+                    Airplane.Airplanes.Remove(airplane);
+                    Console.WriteLine("Proces brisanja aviona {0} ({1}) je dovrsen\n", airplane.Name, airplane.Id);
+                }
+
+                else
+                {
+                    Console.WriteLine("Proces brisanja aviona {0} ({1}) je prekinut\n", airplane.Name, airplane.Id);
+                }
+
+                PendingUser();
+
+                return;
+            }
+        }
+
+        static void DeleteAirplaneByName()
+        {
+
         }
 
         static void AddNewFlight(string name, DateOnly production_year, int total_flights)
