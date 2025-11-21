@@ -322,6 +322,59 @@ namespace Internship_3_OOP.Classes
             }
         }
 
+        public static Enums.Genders ValidateGender()
+        {
+            while (true)
+            {
+                Console.Write("Spol osobe:\n1 - Male\n2 - Female\n\nOdabir: ");
+
+                char choice = Console.ReadKey().KeyChar;
+
+                Console.WriteLine("");
+
+                switch (choice)
+                {
+                    case '1':
+                        Console.WriteLine("");
+                        return Enums.Genders.Male;
+                    case '2':
+                        Console.WriteLine("");
+                        return Enums.Genders.Female;
+                    default:
+                        Console.WriteLine("Unos nije valjan\n");
+                        break;
+                }
+            }
+        }
+
+        public static Enums.Roles ValidateRole()
+        {
+            while (true)
+            {
+                Console.Write("Pozicija osobe:\n1 - Pilot\n2 - Copilot\n3 - Attendant\n\nOdabir: ");
+
+                char choice = Console.ReadKey().KeyChar;
+
+                Console.WriteLine("");
+
+                switch (choice)
+                {
+                    case '1':
+                        Console.WriteLine("");
+                        return Enums.Roles.Pilot;
+                    case '2':
+                        Console.WriteLine("");
+                        return Enums.Roles.Copilot;
+                    case '3':
+                        Console.WriteLine("");
+                        return Enums.Roles.Attendant;
+                    default:
+                        Console.WriteLine("Unos nije valjan\n");
+                        break;
+                }
+            }
+        }
+
         public static bool CheckInput()
         {
             string input = "";

@@ -1,4 +1,5 @@
 ﻿using Internship_3_OOP.Classes;
+using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Internship_3_OOP
@@ -256,6 +257,7 @@ namespace Internship_3_OOP
                     case '2':
                         break;
                     case '3':
+                        CreateNewMember();
                         break;
                     case '4':
                         return;
@@ -420,6 +422,41 @@ namespace Internship_3_OOP
             {
                 Console.WriteLine("{0, -16} {1, -16} {2, -16} {3, -16} {4}\n", member.GetFirstName(), member.GetLastName(), member.Role, member.Gender, member.GetBirthDate());
             }
+        }
+
+        static void CreateNewMember()
+        {
+            Console.WriteLine("\nDODAVANJE NOVE OSOBE\n");
+
+            string first_name = Helper.ValidateName("ime");
+            string last_name = Helper.ValidateName("prezime");
+            DateOnly birth_date = Helper.ValidateBirthDate();
+            Enums.Genders gender = Helper.ValidateGender();
+            Enums.Roles role = Helper.ValidateRole();
+
+            AddNewMember(first_name, last_name, birth_date, gender, role);
+        }
+
+        static void AddNewMember(string first_name, string last_name, DateOnly birth_date, Enums.Genders gender, Enums.Roles role)
+        {
+            Console.Write("Zelite li dovrsiti proces dodavanja nove osobe {0} {1} ({2})? (DA/NE) ", first_name, last_name, role);
+
+            if (Helper.CheckInput())
+            {
+                Member.Members.Add(new Member(first_name, last_name, birth_date, gender, role));
+                Console.WriteLine("Proces dodavanja nove osobe {0} {1} ({2}) je dovrsen\n", first_name, last_name, role);
+            }
+
+            else
+            {
+                Console.WriteLine("Proces dodavanja nove osobe {0} {1} ({2}) je prekinut\n", first_name, last_name, role);
+            }
+
+            Console.Write("Pritisnite bilo koju tipku za nastavak... ");
+            Console.ReadKey(true);
+            Console.Clear();
+
+            return;
         }
     }
 }
