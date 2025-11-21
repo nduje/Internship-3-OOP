@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Data.SqlTypes;
+using System.Text.RegularExpressions;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Internship_3_OOP.Classes
@@ -36,6 +37,10 @@ namespace Internship_3_OOP.Classes
             Member.Members.Add(new Member("Petar", "Juric", new DateOnly(1991, 4, 18), Enums.Genders.Male, Enums.Roles.Copilot));
             Member.Members.Add(new Member("Toni", "Blazevic", new DateOnly(1994, 9, 30), Enums.Genders.Male, Enums.Roles.Attendant));
             Member.Members.Add(new Member("Sara", "Novak", new DateOnly(1998, 12, 14), Enums.Genders.Female, Enums.Roles.Attendant));
+            Member.Members.Add(new Member("Tomislav", "Perkovic", new DateOnly(1982, 2, 14), Enums.Genders.Male, Enums.Roles.Pilot));
+            Member.Members.Add(new Member("Karlo", "Mikic", new DateOnly(1990, 8, 9), Enums.Genders.Male, Enums.Roles.Copilot));
+            Member.Members.Add(new Member("Ivana", "Sostaric", new DateOnly(1996, 1, 27), Enums.Genders.Female, Enums.Roles.Attendant));
+            Member.Members.Add(new Member("Elena", "Vucetic", new DateOnly(1999, 5, 11), Enums.Genders.Female, Enums.Roles.Attendant));
         }
 
         private static void InitializeAircrews()
@@ -298,6 +303,26 @@ namespace Internship_3_OOP.Classes
             return Regex.IsMatch(name, pattern);
         }
 
+        public static string ValidateAircrewName()
+        {
+            string name;
+
+            do
+            {
+                Console.Write("Unesite valjano ime posade (npr. Alpha Crew): ");
+                name = Console.ReadLine() ?? "";
+            } while (string.IsNullOrEmpty(name) || !Helper.IsAirplaneNameValid(name));
+
+            return name;
+        }
+
+        public static bool IsAircrewNameValid(string name)
+        {
+            var pattern = @"^[A-Z][A-Za-z0-9\- ]{2,29}$";
+
+            return Regex.IsMatch(name, pattern);
+        }
+
         public static int ValidateTotalFlights()
         {
             while (true)
@@ -371,6 +396,132 @@ namespace Internship_3_OOP.Classes
                     default:
                         Console.WriteLine("Unos nije valjan\n");
                         break;
+                }
+            }
+        }
+
+        public static Member ValidatePilot()
+        {
+            List<Member> assigned_pilots = new List<Member>(Aircrew.Aircrews.SelectMany(a => a.Members)).Where(m => m.Role == Enums.Roles.Pilot).ToList();
+
+            List<Member> unassigned_pilots = new List<Member>(Member.Members.Where(m => !assigned_pilots.Contains(m) && m.Role == Enums.Roles.Pilot)).ToList();
+
+            if (unassigned_pilots.Count == 0)
+            {
+                Console.WriteLine("\nNe postoji niti jedan dostupan pilot");
+                return null;
+            }
+
+            Console.WriteLine("\nPiloti koji nisu dodijeljeni niti jednoj posadi:\n");
+            Console.WriteLine("{0, -16} {1, -16} {2, -16} {3, -16} {4}","Redni broj", "Ime", "Prezime", "Spol", "Datum rođenja");
+
+            int counter = 0;
+
+            foreach (var member in unassigned_pilots)
+            {
+                Console.WriteLine("{0, -16} {1, -16} {2, -16} {3, -16} {4}", ++counter, member.GetFirstName(), member.GetLastName(), member.Gender, member.GetBirthDate());
+            }
+
+            Console.Write("\nOdaberite redni broj člana kabinskog osoblja kojeg želite dodati\n");
+
+            while (true)
+            {
+                Console.Write("\nOdabir: ");
+
+                if (int.TryParse(Console.ReadLine(), out int index) && (index > 0 && index <= unassigned_pilots.Count))
+                {
+                    Console.WriteLine("\nOdabran je član kabinskog osoblja {0} {1}", unassigned_pilots[index - 1].GetFirstName(), unassigned_pilots[index - 1].GetLastName());
+                    return unassigned_pilots[index - 1];
+                }
+
+                else 
+                {
+                    Console.WriteLine("Unos nije valjan");
+                    continue;
+                }
+            }
+        }
+
+        public static Member ValidateCopilot()
+        {
+            List<Member> assigned_copilots = new List<Member>(Aircrew.Aircrews.SelectMany(a => a.Members)).Where(m => m.Role == Enums.Roles.Copilot).ToList();
+
+            List<Member> unassigned_copilots = new List<Member>(Member.Members.Where(m => !assigned_copilots.Contains(m) && m.Role == Enums.Roles.Copilot)).ToList();
+
+            if (unassigned_copilots.Count == 0)
+            {
+                Console.WriteLine("\nNe postoji niti jedan dostupan kopilot");
+                return null;
+            }
+
+            Console.WriteLine("\nKopiloti koji nisu dodijeljeni niti jednoj posadi:\n");
+            Console.WriteLine("{0, -16} {1, -16} {2, -16} {3, -16} {4}", "Redni broj", "Ime", "Prezime", "Spol", "Datum rođenja");
+
+            int counter = 0;
+
+            foreach (var member in unassigned_copilots)
+            {
+                Console.WriteLine("{0, -16} {1, -16} {2, -16} {3, -16} {4}", ++counter, member.GetFirstName(), member.GetLastName(), member.Gender, member.GetBirthDate());
+            }
+
+            Console.Write("\nOdaberite redni broj kopilota kojeg želite dodati\n");
+
+            while (true)
+            {
+                Console.Write("\nOdabir: ");
+
+                if (int.TryParse(Console.ReadLine(), out int index) && (index > 0 && index <= unassigned_copilots.Count))
+                {
+                    Console.WriteLine("\nOdabran je kopilot {0} {1}", unassigned_copilots[index - 1].GetFirstName(), unassigned_copilots[index - 1].GetLastName());
+                    return unassigned_copilots[index - 1];
+                }
+
+                else
+                {
+                    Console.WriteLine("Unos nije valjan");
+                    continue;
+                }
+            }
+        }
+
+        public static Member ValidateAttendant(List<Member> selected)
+        {
+            List<Member> assigned_attendants = new List<Member>(Aircrew.Aircrews.SelectMany(a => a.Members)).Where(m => m.Role == Enums.Roles.Attendant).ToList();
+
+            List<Member> unassigned_attendants = new List<Member>(Member.Members.Where(m => !assigned_attendants.Contains(m) && !selected.Contains(m) && m.Role == Enums.Roles.Attendant)).ToList();
+
+            if (unassigned_attendants.Count == 0)
+            {
+                Console.WriteLine("\nNe postoji niti jedan dostupan član kabinskog osoblja");
+                return null;
+            }
+
+            Console.WriteLine("\nČlanovi kabinskog osoblja koji nisu dodijeljeni niti jednoj posadi:\n");
+            Console.WriteLine("{0, -16} {1, -16} {2, -16} {3, -16} {4}", "Redni broj", "Ime", "Prezime", "Spol", "Datum rođenja");
+
+            int counter = 0;
+
+            foreach (var member in unassigned_attendants)
+            {
+                Console.WriteLine("{0, -16} {1, -16} {2, -16} {3, -16} {4}", ++counter, member.GetFirstName(), member.GetLastName(), member.Gender, member.GetBirthDate());
+            }
+
+            Console.Write("\nOdaberite redni broj člana kabinskog osoblja kojeg želite dodati\n");
+
+            while (true)
+            {
+                Console.Write("\nOdabir: ");
+
+                if (int.TryParse(Console.ReadLine(), out int index) && (index > 0 && index <= unassigned_attendants.Count))
+                {
+                    Console.WriteLine("\nOdabran je član kabinskog osoblja {0} {1}", unassigned_attendants[index - 1].GetFirstName(), unassigned_attendants[index - 1].GetLastName());
+                    return unassigned_attendants[index - 1];
+                }
+
+                else
+                {
+                    Console.WriteLine("Unos nije valjan");
+                    continue;
                 }
             }
         }

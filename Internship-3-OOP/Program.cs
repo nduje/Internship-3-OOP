@@ -255,6 +255,7 @@ namespace Internship_3_OOP
                         ShowAircrew();
                         break;
                     case '2':
+                        CreateNewAircrew();
                         break;
                     case '3':
                         CreateNewMember();
@@ -400,28 +401,98 @@ namespace Internship_3_OOP
 
         static void ShowAircrew()
         {
-            Console.WriteLine("\n{0, -16} {1}\n", "Naziv posade", "Lista clanova");
+            Console.WriteLine("\n{0, -16} {1}", "Naziv posade", "Lista clanova");
 
             foreach (var aircrew in Aircrew.Aircrews)
             {
                 string members = string.Join(", ", aircrew.Members.Select(m => m.Role + " " + m.GetLastName()));
-                Console.WriteLine("{0, -16} {1}\n", aircrew.Name, members);
+                Console.WriteLine("\n{0, -16} {1}\n", aircrew.Name, members);
                 ShowMembers(aircrew);
             }
 
-            Console.Write("Pritisnite bilo koju tipku za nastavak... ");
+            Console.Write("\nPritisnite bilo koju tipku za nastavak... ");
             Console.ReadKey(true);
             Console.Clear();
         }
 
         static void ShowMembers(Aircrew aircrew)
         {
-            Console.WriteLine("{0, -16} {1, -16} {2, -16} {3, -16} {4}\n", "Ime", "Prezime", "Pozicija", "Spol", "Datum rođenja");
+            Console.WriteLine("{0, -16} {1, -16} {2, -16} {3, -16} {4}", "Ime", "Prezime", "Pozicija", "Spol", "Datum rođenja");
 
             foreach (var member in aircrew.Members)
             {
-                Console.WriteLine("{0, -16} {1, -16} {2, -16} {3, -16} {4}\n", member.GetFirstName(), member.GetLastName(), member.Role, member.Gender, member.GetBirthDate());
+                Console.WriteLine("{0, -16} {1, -16} {2, -16} {3, -16} {4}", member.GetFirstName(), member.GetLastName(), member.Role, member.Gender, member.GetBirthDate());
             }
+        }
+
+        static void CreateNewAircrew()
+        {
+            Console.WriteLine("\nKREIRANJE NOVE POSADE\n");
+
+            string name = Helper.ValidateAircrewName();
+            
+            Member? pilot = Helper.ValidatePilot();
+            if (pilot == null) { UnavailableCrewMessage(); return; }
+
+            Member? copilot = Helper.ValidateCopilot();
+            if (copilot == null) { UnavailableCrewMessage(); return; }
+
+            Member? attendant_1 = Helper.ValidateAttendant(new List<Member>());
+            if (attendant_1 == null) { UnavailableCrewMessage(); return; }
+
+            Member? attendant_2 = Helper.ValidateAttendant(new List<Member>() { attendant_1 });
+            if (attendant_2 == null) { UnavailableCrewMessage(); return; }
+
+            List<Member> members = new List<Member>()
+            {
+                pilot,
+                copilot,
+                attendant_1,
+                attendant_2
+            };
+
+            AddNewAircrew(name, members);
+        }
+
+        static void AddNewAircrew(string name, List<Member> members)
+        {
+            Console.Write("\nZelite li dovrsiti proces kreiranja nove posade {0}? (DA/NE) ", name);
+
+            if (Helper.CheckInput())
+            {
+                Aircrew.Aircrews.Add(new Aircrew(name)
+                {
+                    Members =
+                    {
+                        members[0],
+                        members[1],
+                        members[2],
+                        members[3]
+                    }
+                }
+                );
+
+                Console.WriteLine("Proces kreiranja nove posade {0} je dovrsen\n", name);
+            }
+
+            else
+            {
+                Console.WriteLine("Proces kreiranja nove posade {0} je prekinut\n", name);
+            }
+
+            Console.Write("Pritisnite bilo koju tipku za nastavak... ");
+            Console.ReadKey(true);
+            Console.Clear();
+
+            return;
+        }
+
+        static void UnavailableCrewMessage()
+        {
+            Console.WriteLine("Proces kreiranja nove posade je prekinut\n");
+            Console.Write("Pritisnite bilo koju tipku za nastavak... ");
+            Console.ReadKey(true);
+            Console.Clear();
         }
 
         static void CreateNewMember()
