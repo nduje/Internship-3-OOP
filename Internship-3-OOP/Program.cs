@@ -153,6 +153,7 @@ namespace Internship_3_OOP
                         SearchFlightById();
                         return;
                     case 'b':
+                        SearchFlightByName();
                         return;
                     default:
                         Console.WriteLine("Unos nije valjan");
@@ -391,6 +392,46 @@ namespace Internship_3_OOP
             }
         }
 
+        static void SearchFlightByName()
+        {
+            Console.WriteLine("\nPRETRAŽIVANJE LETA PO NAZIVU\n");
+
+            while (true)
+            {
+                Console.Write("Odaberite let(ove) (unesite puni naziv): ");
+
+                string? number = Console.ReadLine();
+
+                if (string.IsNullOrEmpty(number) || !Helper.IsFlightNumberValid(number))
+                {
+                    Console.WriteLine("Unos nije valjan\n");
+                    continue;
+                }
+
+                List<Flight> flights = Flight.Flights.Where(a => a.Number == number).ToList();
+
+                if (flights.Count == 0)
+                {
+                    Console.WriteLine("Let s nazivom {0} ne postoji\n", number);
+                    PendingUser();
+                    return;
+                }
+
+                Console.WriteLine("\n| {0, -36} | {1, -7} | {2, -20} | {3, -20} | {4, -10} | {5, -17} |", "ID", "Naziv", "Datum polaska", "Datum dolaska", "Udaljenost", "Vrijeme putovanja");
+
+                foreach (var flight in flights)
+                {
+                    Console.WriteLine("| {0, -36} | {1, -7} | {2, -20} | {3, -20} | {4, -10:F2} | {5, -17} |", flight.Id, flight.Number, flight.DepartureTime, flight.ArrivalTime, (flight.Distance + "km"), (flight.Duration.Hours + "h " + flight.Duration.Minutes + "min"));
+                }
+
+                Console.WriteLine("");
+
+                PendingUser();
+
+                return;
+            }
+        }
+
         static void ShowAirplanes()
         {
             Console.WriteLine("\n| {0, -36} | {1, -16} | {2, -18} | {3, -11} |\n", "ID", "Naziv", "Godina proizvodnje", "Broj letova");
@@ -453,7 +494,7 @@ namespace Internship_3_OOP
 
             while (true)
             {
-                Console.Write("Odaberite avion(e) (unesite naziv): ");
+                Console.Write("Odaberite avion(e) (unesite puni naziv): ");
 
                 string? name = Console.ReadLine();
 
@@ -536,7 +577,7 @@ namespace Internship_3_OOP
 
             while (true)
             {
-                Console.Write("Odaberite avion(e) (unesite naziv): ");
+                Console.Write("Odaberite avion(e) (unesite puni naziv): ");
 
                 string? name = Console.ReadLine();
 
