@@ -103,29 +103,6 @@ namespace Internship_3_OOP
             }
         }
 
-        static void ChooseFromSearchFlightsMenu()
-        {
-            while (true)
-            {
-                Console.Write("\nPretraživanje letova:\na - Po ID-u\nb - Po nazivu\n\nOdabir: ");
-
-                char choice = Console.ReadKey().KeyChar;
-
-                Console.WriteLine("");
-
-                switch (choice)
-                {
-                    case 'a':
-                        return;
-                    case 'b':
-                        return;
-                    default:
-                        Console.WriteLine("Unos nije valjan");
-                        break;
-                }
-            }
-        }
-
         static void ChooseFromFlightsMenu()
         {
             while (true)
@@ -152,6 +129,30 @@ namespace Internship_3_OOP
                     case '5':
                         break;
                     case '6':
+                        return;
+                    default:
+                        Console.WriteLine("Unos nije valjan");
+                        break;
+                }
+            }
+        }
+
+        static void ChooseFromSearchFlightsMenu()
+        {
+            while (true)
+            {
+                Console.Write("\nPretraživanje letova:\na - Po ID-u\nb - Po nazivu\n\nOdabir: ");
+
+                char choice = Console.ReadKey().KeyChar;
+
+                Console.WriteLine("");
+
+                switch (choice)
+                {
+                    case 'a':
+                        SearchFlightById();
+                        return;
+                    case 'b':
                         return;
                     default:
                         Console.WriteLine("Unos nije valjan");
@@ -355,6 +356,39 @@ namespace Internship_3_OOP
             PendingUser();
 
             return;
+        }
+
+        static void SearchFlightById()
+        {
+            Console.WriteLine("\nPRETRAŽIVANJE LETA PO IDENTIFIKATORU\n");
+
+            while (true)
+            {
+                Console.Write("Odaberite let (unesite ID): ");
+
+                if (!Guid.TryParse(Console.ReadLine(), out Guid id))
+                {
+                    Console.WriteLine("Unos nije valjan\n");
+                    continue;
+                }
+
+                Flight? flight = Flight.Flights.Find(a => a.Id == id);
+
+                if (flight == null)
+                {
+
+                    Console.WriteLine("Let s identifikatorom {0} ne postoji\n", id);
+                    PendingUser();
+                    return;
+                }
+
+                Console.WriteLine("\n| {0, -36} | {1, -7} | {2, -20} | {3, -20} | {4, -10} | {5, -17} |", "ID", "Naziv", "Datum polaska", "Datum dolaska", "Udaljenost", "Vrijeme putovanja");
+                Console.WriteLine("| {0, -36} | {1, -7} | {2, -20} | {3, -20} | {4, -10:F2} | {5, -17} |\n", flight.Id, flight.Number, flight.DepartureTime, flight.ArrivalTime, (flight.Distance + "km"), (flight.Duration.Hours + "h " + flight.Duration.Minutes + "min"));
+
+                PendingUser();
+
+                return;
+            }
         }
 
         static void ShowAirplanes()
