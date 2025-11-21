@@ -419,7 +419,7 @@ namespace Internship_3_OOP
 
             while (true)
             {
-                Console.Write("Odaberite avion (unesite naziv): ");
+                Console.Write("Odaberite avion(e) (unesite naziv): ");
 
                 string? name = Console.ReadLine();
 
@@ -431,9 +431,8 @@ namespace Internship_3_OOP
 
                 List<Airplane> airplanes = Airplane.Airplanes.Where(a => a.Name == name).ToList();
 
-                if (airplanes == null)
+                if (airplanes.Count == 0)
                 {
-
                     Console.WriteLine("Avion s nazivom {0} ne postoji\n", name);
                     PendingUser();
                     return;
@@ -499,7 +498,50 @@ namespace Internship_3_OOP
 
         static void DeleteAirplaneByName()
         {
+            Console.WriteLine("\nBRISANJE AVIONA PO NAZIVU\n");
 
+            while (true)
+            {
+                Console.Write("Odaberite avion(e) (unesite naziv): ");
+
+                string? name = Console.ReadLine();
+
+                if (string.IsNullOrEmpty(name) || !Helper.IsAirplaneNameValid(name))
+                {
+                    Console.WriteLine("Unos nije valjan\n");
+                    continue;
+                }
+
+                List<Airplane> airplanes = Airplane.Airplanes.Where(a => a.Name == name).ToList();
+
+                if (airplanes.Count == 0)
+                {
+                    Console.WriteLine("Avion s nazivom {0} ne postoji\n", name);
+                    PendingUser();
+                    return;
+                }
+
+                Console.Write("\nZelite li dovrsiti proces brisanja aviona {0} (ukupno: {1})? (DA/NE) ", name, airplanes.Count);
+
+                if (Helper.CheckInput())
+                {
+                    foreach (var airplane in airplanes)
+                    {
+                        Airplane.Airplanes.Remove(airplane);
+                    }
+
+                    Console.WriteLine("Proces brisanja aviona {0} (ukupno: {1}) je dovrsen\n", name, airplanes.Count);
+                }
+
+                else
+                {
+                    Console.WriteLine("Proces brisanja aviona {0} (ukupno: {1}) je prekinut\n", name, airplanes.Count);
+                }
+
+                PendingUser();
+
+                return;
+            }
         }
 
         static void AddNewFlight(string name, DateOnly production_year, int total_flights)
