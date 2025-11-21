@@ -197,6 +197,12 @@ namespace Internship_3_OOP
         {
             while (true)
             {
+                if (!Airplane.Airplanes.Any())
+                {
+                    Console.WriteLine("Ne postoji niti jedan avion u memoriji\n");
+                    break;
+                }
+
                 Console.Write("\nPretraživanje aviona:\na - Po ID-u\nb - Po nazivu\n\nOdabir: ");
 
                 char choice = Console.ReadKey().KeyChar;
@@ -206,12 +212,15 @@ namespace Internship_3_OOP
                 switch (choice)
                 {
                     case 'a':
+                        SearchAirplaneById();
                         return;
                     case 'b':
+                        SearchAirplaneByName();
                         return;
                     default:
                         Console.WriteLine("Unos nije valjan");
                         break;
+
                 }
             }
         }
@@ -297,9 +306,7 @@ namespace Internship_3_OOP
                 Console.WriteLine("Proces registracije je prekinut\n");
             }
 
-            Console.Write("Pritisnite bilo koju tipku za nastavak... ");
-            Console.ReadKey(true);
-            Console.Clear();
+            PendingUser();
 
             return;
         }
@@ -313,9 +320,7 @@ namespace Internship_3_OOP
                 Console.WriteLine("| {0, -36} | {1, -7} | {2, -20} | {3, -20} | {4, -10:F2} | {5, -17} |\n", flight.Id, flight.Number, flight.DepartureTime, flight.ArrivalTime, (flight.Distance + "km"), (flight.Duration.Hours + "h " + flight.Duration.Minutes + "min"));
             }
 
-            Console.Write("Pritisnite bilo koju tipku za nastavak... ");
-            Console.ReadKey(true);
-            Console.Clear();
+            PendingUser();
         }
 
         static void CreateNewFlight()
@@ -345,9 +350,7 @@ namespace Internship_3_OOP
                 Console.WriteLine("Proces dodavanja leta broj {0} je prekinut\n", number);
             }
 
-            Console.Write("Pritisnite bilo koju tipku za nastavak... ");
-            Console.ReadKey(true);
-            Console.Clear();
+            PendingUser();
 
             return;
         }
@@ -361,9 +364,7 @@ namespace Internship_3_OOP
                 Console.WriteLine("| {0, -36} | {1, -16} | {2, -18} | {3, -11} |\n", airplane.Id, airplane.Name, airplane.ProductionYear.Year, airplane.TotalFlights);
             }
 
-            Console.Write("Pritisnite bilo koju tipku za nastavak... ");
-            Console.ReadKey(true);
-            Console.Clear();
+            PendingUser();
         }
 
         static void CreateNewAirplane()
@@ -375,6 +376,44 @@ namespace Internship_3_OOP
             int total_flights = Helper.ValidateTotalFlights();
 
             AddNewFlight(name, production_year, total_flights);
+        }
+
+        static void SearchAirplaneById()
+        {
+            Console.WriteLine("\nPRETRAŽIVANJE AVIONA PO IDENTIFIKATORU\n");
+
+            while (true)
+            {
+                Console.Write("Odaberite avion (unesite ID): ");
+
+                if (!Guid.TryParse(Console.ReadLine(), out Guid id))
+                {
+                    Console.WriteLine("Unos nije valjan\n");
+                    continue;
+                }
+
+                Airplane? airplane = Airplane.Airplanes.Find(a => a.Id == id);
+
+                if (airplane == null)
+                {
+
+                    Console.WriteLine("Avion s identifikatorom {0} ne postoji\n", id);
+                    PendingUser();
+                    return;
+                }
+
+                Console.WriteLine("\n| {0, -36} | {1, -16} | {2, -18} | {3, -11} |", "ID", "Naziv", "Godina proizvodnje", "Broj letova");
+                Console.WriteLine("| {0, -36} | {1, -16} | {2, -18} | {3, -11} |\n", airplane.Id, airplane.Name, airplane.ProductionYear.Year, airplane.TotalFlights);
+
+                PendingUser();
+
+                return;
+            }
+        }
+
+        static void SearchAirplaneByName()
+        {
+
         }
 
         static void AddNewFlight(string name, DateOnly production_year, int total_flights)
@@ -392,9 +431,7 @@ namespace Internship_3_OOP
                 Console.WriteLine("Proces dodavanja aviona {0} je prekinut\n", name);
             }
 
-            Console.Write("Pritisnite bilo koju tipku za nastavak... ");
-            Console.ReadKey(true);
-            Console.Clear();
+            PendingUser();
 
             return;
         }
@@ -410,9 +447,8 @@ namespace Internship_3_OOP
                 ShowMembers(aircrew);
             }
 
-            Console.Write("\nPritisnite bilo koju tipku za nastavak... ");
-            Console.ReadKey(true);
-            Console.Clear();
+            Console.WriteLine("");
+            PendingUser();
         }
 
         static void ShowMembers(Aircrew aircrew)
@@ -480,9 +516,7 @@ namespace Internship_3_OOP
                 Console.WriteLine("Proces kreiranja nove posade {0} je prekinut\n", name);
             }
 
-            Console.Write("Pritisnite bilo koju tipku za nastavak... ");
-            Console.ReadKey(true);
-            Console.Clear();
+            PendingUser();
 
             return;
         }
@@ -490,6 +524,11 @@ namespace Internship_3_OOP
         static void UnavailableCrewMessage()
         {
             Console.WriteLine("Proces kreiranja nove posade je prekinut\n");
+            PendingUser();
+        }
+
+        static void PendingUser()
+        {
             Console.Write("Pritisnite bilo koju tipku za nastavak... ");
             Console.ReadKey(true);
             Console.Clear();

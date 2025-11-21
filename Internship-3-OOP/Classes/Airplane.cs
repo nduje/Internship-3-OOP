@@ -2,7 +2,7 @@
 {
     internal class Airplane
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; private set; }
         public string Name { get; set; }
         public DateOnly ProductionYear { get; set; }
         public int TotalFlights { get; set; }
@@ -14,6 +14,11 @@
             Name = name;
             ProductionYear = production_year;
             TotalFlights = total_flights;
+        }
+
+        public Guid GetId()
+        {
+            return Id;
         }
     }
 }
