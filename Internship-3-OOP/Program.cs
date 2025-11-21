@@ -413,7 +413,37 @@ namespace Internship_3_OOP
 
         static void SearchAirplaneByName()
         {
+            Console.WriteLine("\nPRETRAŽIVANJE AVIONA PO NAZIVU\n");
 
+            while (true)
+            {
+                Console.Write("Odaberite avion (unesite naziv): ");
+
+                string? name = Console.ReadLine();
+
+                if (string.IsNullOrEmpty(name) || !Helper.IsAirplaneNameValid(name))
+                {
+                    Console.WriteLine("Unos nije valjan\n");
+                    continue;
+                }
+
+                Airplane? airplane = Airplane.Airplanes.Find(a => a.Name == name);
+
+                if (airplane == null)
+                {
+
+                    Console.WriteLine("Avion s nazivom {0} ne postoji\n", name);
+                    PendingUser();
+                    return;
+                }
+
+                Console.WriteLine("\n| {0, -36} | {1, -16} | {2, -18} | {3, -11} |", "ID", "Naziv", "Godina proizvodnje", "Broj letova");
+                Console.WriteLine("| {0, -36} | {1, -16} | {2, -18} | {3, -11} |\n", airplane.Id, airplane.Name, airplane.ProductionYear.Year, airplane.TotalFlights);
+
+                PendingUser();
+
+                return;
+            }
         }
 
         static void AddNewFlight(string name, DateOnly production_year, int total_flights)
