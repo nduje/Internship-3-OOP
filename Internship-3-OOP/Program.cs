@@ -317,11 +317,11 @@ namespace Internship_3_OOP
 
         static void ShowFlights()
         {
-            Console.WriteLine("\n| {0, -36} | {1, -7} | {2, -20} | {3, -20} | {4, -10} | {5, -17} |\n", "ID", "Naziv", "Datum polaska", "Datum dolaska", "Udaljenost", "Vrijeme putovanja");
+            Console.WriteLine("\n{0, -42} {1, -8} {2, -24} {3, -24} {4, -16} {5, -24} {6, -16} {7}", "ID", "Naziv", "Datum polaska", "Datum dolaska", "Udaljenost", "Vrijeme putovanja", "Avion", "Posada");
 
             foreach (var flight in Flight.Flights)
             {
-                Console.WriteLine("| {0, -36} | {1, -7} | {2, -20} | {3, -20} | {4, -10:F2} | {5, -17} |\n", flight.Id, flight.Number, flight.DepartureTime, flight.ArrivalTime, (flight.Distance + "km"), (flight.Duration.Hours + "h " + flight.Duration.Minutes + "min"));
+                Console.WriteLine("{0, -42} {1, -8} {2, -24} {3, -24} {4, -16:F2} {5, -24} {6, -16} {7}", flight.Id, flight.Number, flight.DepartureTime, flight.ArrivalTime, (flight.Distance + "km"), (flight.Duration.Hours + "h " + flight.Duration.Minutes + "min"), flight.Airplane.Name, flight.Aircrew.Name);
             }
 
             PendingUser();
@@ -336,22 +336,28 @@ namespace Internship_3_OOP
             DateTime arrival_time = Helper.ValidateDateTime("dolaska");
             double distance = Helper.ValidateDistance();
 
-            AddNewFlight(number, departure_time, arrival_time, distance);
+            Airplane? airplane = Helper.ValidateAirplane();
+            if (airplane == null) { UnavailableCrewMessage(); return; }
+
+            Aircrew? aircrew = Helper.ValidateAircrew();
+            if (aircrew == null) { UnavailableCrewMessage(); return; }
+
+            AddNewFlight(number, departure_time, arrival_time, distance, airplane, aircrew);
         }
 
-        static void AddNewFlight(string number, DateTime departure_time, DateTime arrival_time, double distance)
+        static void AddNewFlight(string number, DateTime departure_time, DateTime arrival_time, double distance, Airplane airplane, Aircrew aircrew)
         {
-            Console.Write("Zelite li dovrsiti proces dodavanja leta broj {0}? (DA/NE) ", number);
+            Console.Write("\nZelite li dovrsiti proces dodavanja leta broj {0}? (DA/NE) ", number);
 
             if (Helper.CheckInput())
             {
-                Flight.Flights.Add(new Flight(number, departure_time, arrival_time, distance));
-                Console.WriteLine("Proces dodavanja leta broj {0} je dovrsen\n", number);
+                Flight.Flights.Add(new Flight(number, departure_time, arrival_time, distance, airplane, aircrew));
+                Console.WriteLine("Proces dodavanja leta broj {0} je dovrsen", number);
             }
 
             else
             {
-                Console.WriteLine("Proces dodavanja leta broj {0} je prekinut\n", number);
+                Console.WriteLine("Proces dodavanja leta broj {0} je prekinut", number);
             }
 
             PendingUser();
@@ -434,11 +440,11 @@ namespace Internship_3_OOP
 
         static void ShowAirplanes()
         {
-            Console.WriteLine("\n| {0, -36} | {1, -16} | {2, -18} | {3, -11} |\n", "ID", "Naziv", "Godina proizvodnje", "Broj letova");
+            Console.WriteLine("\n{0, -42} {1, -16} {2, -24} {3}", "ID", "Naziv", "Godina proizvodnje", "Broj letova");
 
             foreach (var airplane in Airplane.Airplanes)
             {
-                Console.WriteLine("| {0, -36} | {1, -16} | {2, -18} | {3, -11} |\n", airplane.Id, airplane.Name, airplane.ProductionYear.Year, airplane.TotalFlights);
+                Console.WriteLine("{0, -42} {1, -16} {2, -24} {3}", airplane.Id, airplane.Name, airplane.ProductionYear.Year, airplane.TotalFlights);
             }
 
             PendingUser();
@@ -452,7 +458,27 @@ namespace Internship_3_OOP
             DateOnly production_year = Helper.ValidateDate("proizvodnje");
             int total_flights = Helper.ValidateTotalFlights();
 
-            AddNewFlight(name, production_year, total_flights);
+            AddNewAirplane(name, production_year, total_flights);
+        }
+
+        static void AddNewAirplane(string name, DateOnly production_year, int total_flights)
+        {
+            Console.Write("Zelite li dovrsiti proces dodavanja aviona {0}? (DA/NE) ", name);
+
+            if (Helper.CheckInput())
+            {
+                Airplane.Airplanes.Add(new Airplane(name, production_year, total_flights));
+                Console.WriteLine("Proces dodavanja aviona {0} je dovrsen\n", name);
+            }
+
+            else
+            {
+                Console.WriteLine("Proces dodavanja aviona {0} je prekinut\n", name);
+            }
+
+            PendingUser();
+
+            return;
         }
 
         static void SearchAirplaneById()
@@ -619,26 +645,6 @@ namespace Internship_3_OOP
             }
         }
 
-        static void AddNewFlight(string name, DateOnly production_year, int total_flights)
-        {
-            Console.Write("Zelite li dovrsiti proces dodavanja aviona {0}? (DA/NE) ", name);
-
-            if (Helper.CheckInput())
-            {
-                Airplane.Airplanes.Add(new Airplane(name, production_year, total_flights));
-                Console.WriteLine("Proces dodavanja aviona {0} je dovrsen\n", name);
-            }
-
-            else
-            {
-                Console.WriteLine("Proces dodavanja aviona {0} je prekinut\n", name);
-            }
-
-            PendingUser();
-
-            return;
-        }
-
         static void ShowAircrew()
         {
             Console.WriteLine("\n{0, -16} {1}", "Naziv posade", "Lista clanova");
@@ -646,7 +652,7 @@ namespace Internship_3_OOP
             foreach (var aircrew in Aircrew.Aircrews)
             {
                 string members = string.Join(", ", aircrew.Members.Select(m => m.Role + " " + m.GetLastName()));
-                Console.WriteLine("\n{0, -16} {1}\n", aircrew.Name, members);
+                Console.WriteLine("\n{0, -16} {1}", aircrew.Name, members);
                 ShowMembers(aircrew);
             }
 
@@ -656,7 +662,7 @@ namespace Internship_3_OOP
 
         static void ShowMembers(Aircrew aircrew)
         {
-            Console.WriteLine("{0, -16} {1, -16} {2, -16} {3, -16} {4}", "Ime", "Prezime", "Pozicija", "Spol", "Datum rođenja");
+            Console.WriteLine("\n{0, -16} {1, -16} {2, -16} {3, -16} {4}", "Ime", "Prezime", "Pozicija", "Spol", "Datum rođenja");
 
             foreach (var member in aircrew.Members)
             {
@@ -732,7 +738,7 @@ namespace Internship_3_OOP
 
         static void PendingUser()
         {
-            Console.Write("Pritisnite bilo koju tipku za nastavak... ");
+            Console.Write("\nPritisnite bilo koju tipku za nastavak... ");
             Console.ReadKey(true);
             Console.Clear();
         }

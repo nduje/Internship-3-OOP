@@ -8,16 +8,16 @@ namespace Internship_3_OOP.Classes
     {
         public static void Initialize()
         {
-            InitializeFlights();
             InitializeAirplanes();
             InitializeMembers();
             InitializeAircrews();
+            InitializeFlights();
         }
 
         private static void InitializeFlights()
         {
-            Flight.Flights.Add(new Flight("LH256", new DateTime(2025, 11, 19, 14, 30, 0), new DateTime(2025, 11, 19, 18, 45, 0), 1200));
-            Flight.Flights.Add(new Flight("AA100", new DateTime(2025, 11, 20, 9, 0, 0), new DateTime(2025, 11, 20, 11, 30, 0), 800));
+            Flight.Flights.Add(new Flight("LH256", new DateTime(2025, 11, 19, 14, 30, 0), new DateTime(2025, 11, 19, 18, 45, 0), 1200, Airplane.Airplanes[0], Aircrew.Aircrews[0]));
+            Flight.Flights.Add(new Flight("AA100", new DateTime(2025, 11, 20, 9, 0, 0), new DateTime(2025, 11, 20, 11, 30, 0), 800, Airplane.Airplanes[1], Aircrew.Aircrews[1]));
         }
 
         private static void InitializeAirplanes()
@@ -69,6 +69,18 @@ namespace Internship_3_OOP.Classes
                     }
                 }
             );
+
+            Aircrew.Aircrews.Add(new Aircrew("Charlie Crew")
+            {
+                Members =
+                    {
+                        Member.Members[8],
+                        Member.Members[9],
+                        Member.Members[10],
+                        Member.Members[11]
+                    }
+            }
+);
         }
 
         public static Guid GenerateGuid()
@@ -517,6 +529,91 @@ namespace Internship_3_OOP.Classes
                 {
                     Console.WriteLine("\nOdabran je član kabinskog osoblja {0} {1}", unassigned_attendants[index - 1].GetFirstName(), unassigned_attendants[index - 1].GetLastName());
                     return unassigned_attendants[index - 1];
+                }
+
+                else
+                {
+                    Console.WriteLine("Unos nije valjan");
+                    continue;
+                }
+            }
+        }
+
+        public static Airplane ValidateAirplane()
+        {
+            List<Airplane> unavailable_airplanes = new List<Airplane>(Flight.Flights.Select(a => a.Airplane)).ToList();
+
+            List<Airplane> available_airplanes = new List<Airplane>(Airplane.Airplanes.Where(m => !unavailable_airplanes.Contains(m))).ToList();
+
+            if (available_airplanes.Count == 0)
+            {
+                Console.WriteLine("\nNe postoji niti jedan dostupan avion");
+                return null;
+            }
+
+            Console.WriteLine("\nAvioni koji nisu dodijeljeni niti jednom letu:\n");
+            Console.WriteLine("{0, -16} {1, -42} {2, -16} {3, -24} {4}", "Redni broj", "ID", "Naziv", "Godina proizvodnje", "Broj letova");
+
+            int counter = 0;
+
+            foreach (var airplane in available_airplanes)
+            {
+                Console.WriteLine("{0, -16} {1, -42} {2, -16} {3, -24} {4}", ++counter, airplane.Id, airplane.Name, airplane.ProductionYear, airplane.TotalFlights);
+            }
+
+            Console.Write("\nOdaberite redni broj aviona kojeg želite dodijeliti letu\n");
+
+            while (true)
+            {
+                Console.Write("\nOdabir: ");
+
+                if (int.TryParse(Console.ReadLine(), out int index) && (index > 0 && index <= available_airplanes.Count))
+                {
+                    Console.WriteLine("\nOdabran je avion {0} ({1})", available_airplanes[index - 1].Name, available_airplanes[index - 1].Id);
+                    return available_airplanes[index - 1];
+                }
+
+                else
+                {
+                    Console.WriteLine("Unos nije valjan");
+                    continue;
+                }
+            }
+        }
+
+        public static Aircrew ValidateAircrew()
+        {
+            List<Aircrew> unavailable_aircrews = new List<Aircrew>(Flight.Flights.Select(a => a.Aircrew)).ToList();
+
+            List<Aircrew> available_aircrews = new List<Aircrew>(Aircrew.Aircrews.Where(m => !unavailable_aircrews.Contains(m))).ToList();
+
+            if (available_aircrews.Count == 0)
+            {
+                Console.WriteLine("\nNe postoji niti jedna dostupna posada");
+                return null;
+            }
+
+            Console.WriteLine("\nPosade koje nisu dodijeljene niti jednom letu:\n");
+            Console.WriteLine("\n{0, -16} {1, -16} {2}", "Redni broj" ,"Naziv posade", "Lista clanova");
+
+            int counter = 0;
+
+            foreach (var aircrew in available_aircrews)
+            {
+                string members = string.Join(", ", aircrew.Members.Select(m => m.Role + " " + m.GetLastName()));
+                Console.WriteLine("{0, -16} {1, -16} {2}", ++counter, aircrew.Name, members);
+            }
+
+            Console.Write("\nOdaberite redni broj posade koju želite dodijeliti letu\n");
+
+            while (true)
+            {
+                Console.Write("\nOdabir: ");
+
+                if (int.TryParse(Console.ReadLine(), out int index) && (index > 0 && index <= available_aircrews.Count))
+                {
+                    Console.WriteLine("\nOdabrana je posada {0}", available_aircrews[index - 1].Name);
+                    return available_aircrews[index - 1];
                 }
 
                 else
