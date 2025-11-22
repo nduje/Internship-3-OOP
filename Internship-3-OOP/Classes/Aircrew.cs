@@ -12,10 +12,14 @@ namespace Internship_3_OOP.Classes
         public string Name { get; set; }
         public List<Member> Members = new List<Member>();
         public static List<Aircrew> Aircrews = new List<Aircrew>();
+        public DateTime Created { get; set; }
+        public DateTime LastUpdated { get; set; }
 
         public Aircrew(string name) 
         {
             Name = name;
+            Created = DateTime.Now;
+            LastUpdated = DateTime.Now;
         }
 
         public static void ShowAircrew()

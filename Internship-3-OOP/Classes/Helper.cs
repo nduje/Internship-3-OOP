@@ -287,11 +287,11 @@ namespace Internship_3_OOP.Classes
             }
         }
 
-        public static int ValidateCapacity()
+        public static int ValidateCapacity(Enums.Classes category)
         {
             while (true)
             {
-                Console.Write("Unesite kapacitet aviona: ");
+                Console.Write("Unesite kapacitet {0} klase: ", category);
 
                 if (!int.TryParse(Console.ReadLine(), out int capacity))
                 {
@@ -308,6 +308,48 @@ namespace Internship_3_OOP.Classes
 
                 Console.WriteLine("");
                 return capacity;
+            }
+        }
+
+        public static Enums.Classes ValidateCategory(Flight flight)
+        {
+            Dictionary<Enums.Classes, int> capacities = flight.Airplane.Capacities;
+
+            while (true)
+            {
+                Console.Write("\nOdaberite kategoriju sjedala:\n1 - Standard (dostupno: {0})\n2 - Business (dostupno: {1})\n3 - VIP (dostupno: {2})\n\nOdabir: ", capacities[Enums.Classes.Standard], capacities[Enums.Classes.Business], capacities[Enums.Classes.VIP]);
+
+                char choice = Console.ReadKey().KeyChar;
+
+                Console.WriteLine("");
+
+                switch (choice)
+                {
+                    case '1':
+                        if (capacities[Enums.Classes.Standard] > 0)
+                            return Enums.Classes.Standard;
+
+                        Console.WriteLine("Nema slobodnih sjedala u Standard kategoriji");
+                        break;
+
+                    case '2':
+                        if (capacities[Enums.Classes.Business] > 0)
+                            return Enums.Classes.Business;
+
+                        Console.WriteLine("Nema slobodnih sjedala u Business kategoriji");
+                        break;
+
+                    case '3':
+                        if (capacities[Enums.Classes.VIP] > 0)
+                            return Enums.Classes.VIP;
+
+                        Console.WriteLine("Nema slobodnih sjedala u VIP kategoriji");
+                        break;
+
+                    default:
+                        Console.WriteLine("Unos nije valjan");
+                        break;
+                }
             }
         }
 
@@ -577,7 +619,7 @@ namespace Internship_3_OOP.Classes
 
         public static Flight? ValidateAvailableFlight()
         {
-            List<Flight> available_flights = Flight.Flights.Where(f => f.DepartureTime > DateTime.Now && f.Passengers.Count < f.Airplane.Capacity).ToList();
+            List<Flight> available_flights = Flight.Flights.Where(f => f.DepartureTime > DateTime.Now && 0 < f.Airplane.CurrentCapacity && !Passenger.SignedPassenger!.Flights.Contains(f)).ToList();
 
             if (available_flights.Count == 0)
             {

@@ -6,6 +6,8 @@
         protected string LastName { get; set; }
         protected DateOnly BirthDate { get; set; }
         protected Guid Id { get; private set; }
+        public DateTime Created { get; set; }
+        public DateTime LastUpdated { get; set; }
 
         protected Person(string first_name, string last_name, DateOnly birth_date)
         {
@@ -13,6 +15,8 @@
             LastName = last_name;
             BirthDate = birth_date;
             Id = Helper.GenerateGuid();
+            Created = DateTime.Now;
+            LastUpdated = DateTime.Now;
         }
 
         public string GetFirstName()

@@ -6,21 +6,39 @@
         public string Name { get; set; }
         public DateOnly ProductionYear { get; set; }
         public int TotalFlights { get; set; }
-        public int Capacity { get; set; }
-        public static List<Airplane> Airplanes = new List<Airplane>(); 
-        
-        public Airplane(string name, DateOnly production_year, int total_flights, int capacity)
+        public Dictionary<Enums.Classes, int> Capacities { get; set; }
+        public int MaximumCapacity { get; set; }
+        public int CurrentCapacity { get; set; }
+        public static List<Airplane> Airplanes = new List<Airplane>();
+        public DateTime Created { get; set; }
+        public DateTime LastUpdated { get; set; }
+
+        public Airplane(string name, DateOnly production_year, int total_flights, int standard_capacity, int business_capacity, int vip_capacity)
         {
             Id = Helper.GenerateGuid();
             Name = name;
             ProductionYear = production_year;
             TotalFlights = total_flights;
-            Capacity = capacity;
+            Capacities = new Dictionary<Enums.Classes, int>
+            {
+                { Enums.Classes.Standard, standard_capacity },
+                { Enums.Classes.Business, business_capacity },
+                { Enums.Classes.VIP, vip_capacity }
+            };
+            MaximumCapacity = CalculateCapacity();
+            CurrentCapacity = MaximumCapacity;
+            Created = DateTime.Now;
+            LastUpdated = DateTime.Now;
         }
 
         public Guid GetId()
         {
             return Id;
+        }
+
+        public int CalculateCapacity()
+        {
+            return Capacities[Enums.Classes.Standard] + Capacities[Enums.Classes.Business] + Capacities[Enums.Classes.VIP];
         }
 
         public static void ShowAirplanes()
@@ -42,18 +60,20 @@
             string name = Helper.ValidateAirplaneName();
             DateOnly production_year = Helper.ValidateDate("proizvodnje");
             int total_flights = Helper.ValidateTotalFlights();
-            int capacity = Helper.ValidateCapacity();
+            int standard_capacity = Helper.ValidateCapacity(Enums.Classes.Standard);
+            int business_capacity = Helper.ValidateCapacity(Enums.Classes.Business);
+            int vip_capacity = Helper.ValidateCapacity(Enums.Classes.VIP);
 
-            AddNewAirplane(name, production_year, total_flights, capacity);
+            AddNewAirplane(name, production_year, total_flights, standard_capacity, business_capacity, vip_capacity);
         }
 
-        public static void AddNewAirplane(string name, DateOnly production_year, int total_flights, int capacity)
+        public static void AddNewAirplane(string name, DateOnly production_year, int total_flights, int standard_capacity, int business_capacity, int vip_capacity)
         {
             Console.Write("Zelite li dovrsiti proces dodavanja aviona {0}? (DA/NE) ", name);
 
             if (Helper.CheckInput())
             {
-                Airplanes.Add(new Airplane(name, production_year, total_flights, capacity));
+                Airplanes.Add(new Airplane(name, production_year, total_flights, standard_capacity, business_capacity, vip_capacity));
                 Console.WriteLine("Proces dodavanja aviona {0} je dovrsen\n", name);
             }
 

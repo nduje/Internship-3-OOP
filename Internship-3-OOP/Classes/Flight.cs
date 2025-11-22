@@ -12,6 +12,8 @@
         public Airplane Airplane { get; set; }
         public Aircrew Aircrew { get; set; }
         public List<Passenger> Passengers { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime LastUpdated { get; set; }
 
         public Flight(string number, DateTime departureTime, DateTime arrivalTime, double distance, Airplane airplane, Aircrew aircrew)
         {
@@ -24,6 +26,8 @@
             Airplane = airplane;
             Aircrew = aircrew;
             Passengers = new List<Passenger>();
+            Created = DateTime.Now;
+            LastUpdated = DateTime.Now;
         }
 
         private TimeSpan CalculateDuration()
@@ -211,7 +215,7 @@
                 }
 
                 DateTime departure_time, arrival_time;
-                Aircrew aircrew;
+                Aircrew? aircrew;
 
                 Console.Write("\nŽelite li promijeniti datum i vrijeme polaska? (DA/NE) ");
 
@@ -247,7 +251,7 @@
                     return;
                 }
 
-                ConfirmEditFlight(flight, departure_time, arrival_time, aircrew);
+                ConfirmEditFlight(flight, departure_time, arrival_time, aircrew!);
 
                 return;
             }
@@ -263,6 +267,7 @@
                 flight.ArrivalTime = arrival_time;
                 flight.Aircrew = aircrew;
                 flight.Duration = arrival_time - departure_time;
+                flight.LastUpdated = DateTime.Now;
 
                 Console.WriteLine("Proces uredivanja leta {0} je dovrsen\n", flight.Number);
                 Console.WriteLine("{0, -42} {1, -8} {2, -24} {3, -24} {4, -16} {5, -24} {6, -16} {7}", "ID", "Naziv", "Datum polaska", "Datum dolaska", "Udaljenost", "Vrijeme putovanja", "Avion", "Posada");
@@ -311,7 +316,7 @@
                     return;
                 }
 
-                if (flight.Passengers.Count > flight.Airplane.Capacity / 2)
+                if (flight.Passengers.Count > flight.Airplane.MaximumCapacity / 2)
                 {
                     Console.WriteLine("\nPopunjeno je vise od 50% kapaciteta leta\nProces brisanja leta {0} je prekinut", flight.Number);
                     Helper.PendingUser();

@@ -109,18 +109,25 @@ namespace Internship_3_OOP.Classes
                 return;
             }
 
-            ConfirmReserveFlight(flight);
+            Enums.Classes category = Helper.ValidateCategory(flight);
+
+            ConfirmReserveFlight(flight, category);
 
             return;
         }
 
-        public static void ConfirmReserveFlight(Flight flight)
+        public static void ConfirmReserveFlight(Flight flight, Enums.Classes category)
         {
             Console.Write("\nZelite li dovrsiti proces rezervacije leta {0}? (DA/NE) ", flight.Number);
 
             if (Helper.CheckInput())
             {
                 SignedPassenger?.Flights.Add(flight);
+                flight.Airplane.Capacities[category]--;
+                flight.Airplane.CurrentCapacity--;
+                flight.Airplane.LastUpdated = DateTime.Now;
+                flight.Passengers.Add(SignedPassenger!);
+                Reservation.Reservations.Add(new Reservation(SignedPassenger!, flight, category));
 
                 Console.WriteLine("Rezerviran je let {0}\n", flight.Number);
                 Console.WriteLine("{0, -42} {1, -8} {2, -24} {3, -24} {4, -16} {5, -24} {6, -16} {7}", "ID", "Naziv", "Datum polaska", "Datum dolaska", "Udaljenost", "Vrijeme putovanja", "Avion", "Posada");
@@ -244,18 +251,27 @@ namespace Internship_3_OOP.Classes
                 return;
             }
 
-            ConfirmCancelFlight(flight);
+
+            Reservation reservation = Reservation.Reservations.FirstOrDefault(c => c.Passenger == SignedPassenger && c.Flight == flight)!;
+            Enums.Classes category = reservation.Category;
+
+            ConfirmCancelFlight(flight, category, reservation);
 
             return;
         }
 
-        public static void ConfirmCancelFlight(Flight flight)
+        public static void ConfirmCancelFlight(Flight flight, Enums.Classes category, Reservation reservation)
         {
             Console.Write("\nZelite li dovrsiti proces otkazivanja leta {0}? (DA/NE) ", flight.Number);
 
             if (Helper.CheckInput())
             {
                 SignedPassenger?.Flights.Remove(flight);
+                flight.Airplane.Capacities[category]++;
+                flight.Airplane.CurrentCapacity++;
+                flight.Airplane.LastUpdated = DateTime.Now;
+                flight.Passengers.Remove(SignedPassenger!);
+                Reservation.Reservations.Remove(reservation);
 
                 Console.WriteLine("Otkazan je let {0}", flight.Number);
             }

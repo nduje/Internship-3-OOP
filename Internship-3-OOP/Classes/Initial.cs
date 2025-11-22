@@ -21,6 +21,7 @@ namespace Internship_3_OOP.Classes
         {
             Passenger.Passengers.Add(new Passenger("Duje", "Nikolic Malora", new DateOnly(2000, 12, 16), "duje@gmail.com", "Duje1234"));
             Passenger.Passengers.Add(new Passenger("Josko", "Diko", new DateOnly(2000, 11, 20), "josko@gmail.com", "Josko1234"));
+            Passenger.Passengers.Add(new Passenger("Mate", "Matic", new DateOnly(2000, 1, 1), "mate@gmail.com", "Mate1234"));
         }
 
 
@@ -32,10 +33,10 @@ namespace Internship_3_OOP.Classes
 
         private static void InitializeAirplanes()
         {
-            Airplane.Airplanes.Add(new Airplane("Boeing 737", new DateOnly(2015, 6, 12), 1200, 50));
-            Airplane.Airplanes.Add(new Airplane("Boeing 737", new DateOnly(2012, 3, 6), 1200, 50));
-            Airplane.Airplanes.Add(new Airplane("Airbus A320", new DateOnly(2018, 3, 25), 950, 20));
-            Airplane.Airplanes.Add(new Airplane("Embraer E195", new DateOnly(2020, 11, 5), 600, 5));
+            Airplane.Airplanes.Add(new Airplane("Boeing 737", new DateOnly(2015, 6, 12), 1200, 50, 5, 0));
+            Airplane.Airplanes.Add(new Airplane("Embraer E195", new DateOnly(2020, 11, 5), 600, 5, 0, 0));
+            Airplane.Airplanes.Add(new Airplane("Boeing 737", new DateOnly(2012, 3, 6), 1200, 50, 5, 0));
+            Airplane.Airplanes.Add(new Airplane("Airbus A320", new DateOnly(2018, 3, 25), 950, 20, 5, 0));
         }
 
         private static void InitializeMembers()
