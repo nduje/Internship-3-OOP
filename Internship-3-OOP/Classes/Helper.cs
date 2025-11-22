@@ -574,6 +574,46 @@ namespace Internship_3_OOP.Classes
             }
         }
 
+        public static Flight? ValidateFlight()
+        {
+            List<Flight> available_flights = Flight.Flights.Where(f => f.DepartureTime > DateTime.Now && f.Passengers.Count < f.Airplane.Capacity).ToList();
+
+            if (available_flights.Count == 0)
+            {
+                Console.WriteLine("\nNe postoji niti jedan dostupan let");
+                return null;
+            }
+
+            Console.WriteLine("\nDostupni letovi:");
+            Console.WriteLine("\n{0, -16} {1, -42} {2, -8} {3, -24} {4, -24} {5, -16} {6, -24} {7, -16} {8}", "Redni broj", "ID", "Naziv", "Datum polaska", "Datum dolaska", "Udaljenost", "Vrijeme putovanja", "Avion", "Posada");
+
+            int counter = 0;
+
+            foreach (var flight in available_flights)
+            {
+                Console.WriteLine("{0, -16} {1, -42} {2, -8} {3, -24} {4, -24} {5, -16:F2} {6, -24} {7, -16} {8}", ++counter, flight.Id, flight.Number, flight.DepartureTime, flight.ArrivalTime, (flight.Distance + "km"), (flight.Duration.Hours + "h " + flight.Duration.Minutes + "min"), flight.Airplane.Name, flight.Aircrew.Name);
+            }
+
+            Console.Write("\nOdaberite redni broj leta kojeg želite rezervirati\n");
+
+            while (true)
+            {
+                Console.Write("\nOdabir: ");
+
+                if (int.TryParse(Console.ReadLine(), out int index) && (index > 0 && index <= available_flights.Count))
+                {
+                    Console.WriteLine("\nOdabran je let {0}", available_flights[index - 1].Number);
+                    return available_flights[index - 1];
+                }
+
+                else
+                {
+                    Console.WriteLine("Unos nije valjan");
+                    continue;
+                }
+            }
+        }
+
         public static bool CheckInput()
         {
             string input = "";

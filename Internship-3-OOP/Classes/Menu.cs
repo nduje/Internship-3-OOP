@@ -83,6 +83,7 @@ namespace Internship_3_OOP.Classes
                     case '1':
                         break;
                     case '2':
+                        Passenger.ReserveFlight();
                         break;
                     case '3':
                         break;

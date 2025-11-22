@@ -1,4 +1,6 @@
-﻿namespace Internship_3_OOP.Classes
+﻿using System.Diagnostics.Metrics;
+
+namespace Internship_3_OOP.Classes
 {
     internal class Passenger : Person
     {
@@ -6,7 +8,7 @@
         string Password { get; set; }
         public static List<Passenger> Passengers = new List<Passenger>();
         public static Passenger? SignedPassenger {  get; set; }
-        public static List<Flight> Flights = new List<Flight>();
+        public List<Flight> Flights = new List<Flight>();
 
         public Passenger(string first_name, string last_name, DateOnly birth_date, string email, string password) : base(first_name, last_name, birth_date)
         {
@@ -69,6 +71,45 @@
 
             SignedPassenger = passenger;
             Menu.ChooseFromSignedPassengersMenu();
+
+            return;
+        }
+
+        public static void ReserveFlight()
+        {
+            Flight? flight = Helper.ValidateFlight();
+
+            if (flight == null)
+            {
+                Console.WriteLine("Proces rezervacije je prekinut");
+                Helper.PendingUser();
+                return;
+            }
+
+            ConfirmReserveFlight(flight);
+
+            return;
+        }
+
+        public static void ConfirmReserveFlight(Flight flight)
+        {
+            Console.Write("\nZelite li dovrsiti proces rezervacije leta {0}? (DA/NE) ", flight.Number);
+
+            if (Helper.CheckInput())
+            {
+                SignedPassenger?.Flights.Add(flight);
+
+                Console.WriteLine("Rezerviran je let {0}\n", flight.Number);
+                Console.WriteLine("{0, -42} {1, -8} {2, -24} {3, -24} {4, -16} {5, -24} {6, -16} {7}", "ID", "Naziv", "Datum polaska", "Datum dolaska", "Udaljenost", "Vrijeme putovanja", "Avion", "Posada");
+                Console.WriteLine("{0, -42} {1, -8} {2, -24} {3, -24} {4, -16:F2} {5, -24} {6, -16} {7}", flight.Id, flight.Number, flight.DepartureTime, flight.ArrivalTime, (flight.Distance + "km"), (flight.Duration.Hours + "h " + flight.Duration.Minutes + "min"), flight.Airplane.Name, flight.Aircrew.Name);
+            }
+
+            else
+            {
+                Console.WriteLine("Proces rezervacije leta {0} je prekinut\n", flight.Number);
+            }
+
+            Helper.PendingUser();
 
             return;
         }
