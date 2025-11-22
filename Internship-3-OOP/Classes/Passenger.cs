@@ -7,7 +7,7 @@ namespace Internship_3_OOP.Classes
         string Email { get; set; }
         string Password { get; set; }
         public static List<Passenger> Passengers = new List<Passenger>();
-        public static Passenger? SignedPassenger {  get; set; }
+        public static Passenger? SignedPassenger { get; set; }
         public List<Flight> Flights = new List<Flight>();
 
         public Passenger(string first_name, string last_name, DateOnly birth_date, string email, string password) : base(first_name, last_name, birth_date)
@@ -77,7 +77,7 @@ namespace Internship_3_OOP.Classes
 
         public static void ReserveFlight()
         {
-            Flight? flight = Helper.ValidateFlight();
+            Flight? flight = Helper.ValidateAvailableFlight();
 
             if (flight == null)
             {
@@ -106,7 +106,44 @@ namespace Internship_3_OOP.Classes
 
             else
             {
-                Console.WriteLine("Proces rezervacije leta {0} je prekinut\n", flight.Number);
+                Console.WriteLine("Proces rezervacije leta {0} je prekinut", flight.Number);
+            }
+
+            Helper.PendingUser();
+
+            return;
+        }
+
+        public static void CancelFlight()
+        {
+            Flight? flight = Helper.ValidateReservedFlight();
+
+            if (flight == null)
+            {
+                Console.WriteLine("Proces rezervacije je prekinut");
+                Helper.PendingUser();
+                return;
+            }
+
+            ConfirmCancelFlight(flight);
+
+            return;
+        }
+
+        public static void ConfirmCancelFlight(Flight flight)
+        {
+            Console.Write("\nZelite li dovrsiti proces otkazivanja leta {0}? (DA/NE) ", flight.Number);
+
+            if (Helper.CheckInput())
+            {
+                SignedPassenger?.Flights.Remove(flight);
+
+                Console.WriteLine("Otkazan je let {0}", flight.Number);
+            }
+
+            else
+            {
+                Console.WriteLine("Proces rezervacije leta {0} je prekinut", flight.Number);
             }
 
             Helper.PendingUser();

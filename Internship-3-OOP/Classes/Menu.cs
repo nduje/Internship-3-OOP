@@ -88,6 +88,7 @@ namespace Internship_3_OOP.Classes
                     case '3':
                         break;
                     case '4':
+                        Passenger.CancelFlight();
                         break;
                     case '5':
                         return;
