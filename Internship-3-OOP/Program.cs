@@ -9,7 +9,7 @@ namespace Internship_3_OOP
     {
         static void Main(string[] args)
         {
-            Helper.Initialize();
+            Initial.Initialize();
             Console.WriteLine("APLIKACIJA ZA UPRAVLJANJE AERODROMOM");
             Menu.ChooseFromMainMenu();
         }

@@ -57,7 +57,7 @@ namespace Internship_3_OOP.Classes
                         Passenger.RegisterNewPassenger();
                         break;
                     case '2':
-                        ChooseFromSignedPassengersMenu();
+                        Passenger.SignIn();
                         break;
                     case '3':
                         return;

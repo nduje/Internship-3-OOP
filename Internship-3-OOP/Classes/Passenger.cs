@@ -6,6 +6,7 @@
         string Password { get; set; }
         public static List<Passenger> Passengers = new List<Passenger>();
         public static Passenger? SignedPassenger {  get; set; }
+        public static List<Flight> Flights = new List<Flight>();
 
         public Passenger(string first_name, string last_name, DateOnly birth_date, string email, string password) : base(first_name, last_name, birth_date)
         {
@@ -32,7 +33,7 @@
 
             if (Helper.CheckInput())
             {
-                Passenger.Passengers.Add(new Passenger(first_name, last_name, birth_date, email, password));
+                Passengers.Add(new Passenger(first_name, last_name, birth_date, email, password));
                 Console.WriteLine("Proces registracije je dovrsen\n");
             }
 
@@ -42,6 +43,32 @@
             }
 
             Helper.PendingUser();
+
+            return;
+        }
+
+        public static void SignIn()
+        {
+            Console.WriteLine("\nPRIJAVA PUTNIKA\n");
+
+            string email = Helper.ValidateEmail();
+            string password = Helper.ValidatePassword();
+
+            Passenger? passenger = Passenger.Passengers.Find(p => p.Email == email && p.Password == password);
+
+            if (passenger == null)
+            {
+                Console.WriteLine("Pogrešan email ili lozinka");
+                Helper.PendingUser();
+                SignedPassenger = null;
+                return;
+            }
+
+            Console.WriteLine("Dobro došao, {0}", passenger.FirstName);
+            Helper.PendingUser();
+
+            SignedPassenger = passenger;
+            Menu.ChooseFromSignedPassengersMenu();
 
             return;
         }
