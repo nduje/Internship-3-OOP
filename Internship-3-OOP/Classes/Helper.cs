@@ -593,8 +593,8 @@ namespace Internship_3_OOP.Classes
                 return null;
             }
 
-            Console.WriteLine("\nPosade koje nisu dodijeljene niti jednom letu:\n");
-            Console.WriteLine("\n{0, -16} {1, -16} {2}", "Redni broj" ,"Naziv posade", "Lista clanova");
+            Console.WriteLine("Posade koje nisu dodijeljene niti jednom letu:\n");
+            Console.WriteLine("{0, -16} {1, -16} {2}", "Redni broj" ,"Naziv posade", "Lista clanova");
 
             int counter = 0;
 

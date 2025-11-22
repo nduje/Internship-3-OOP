@@ -125,6 +125,7 @@ namespace Internship_3_OOP
                         ChooseFromSearchFlightsMenu();
                         break;
                     case '4':
+                        EditFlight();
                         break;
                     case '5':
                         break;
@@ -371,9 +372,18 @@ namespace Internship_3_OOP
 
             while (true)
             {
-                Console.Write("Odaberite let (unesite ID): ");
+                Console.Write("Odaberite let (unesite ID ili ostavite prazno za prekid): ");
 
-                if (!Guid.TryParse(Console.ReadLine(), out Guid id))
+                string? input = Console.ReadLine();
+
+                if (string.IsNullOrEmpty(input))
+                {
+                    Console.WriteLine("Proces pretraživanja je prekinut");
+                    PendingUser();
+                    return;
+                }
+
+                if (!Guid.TryParse(input, out Guid id))
                 {
                     Console.WriteLine("Unos nije valjan\n");
                     continue;
@@ -384,13 +394,13 @@ namespace Internship_3_OOP
                 if (flight == null)
                 {
 
-                    Console.WriteLine("Let s identifikatorom {0} ne postoji\n", id);
+                    Console.WriteLine("Let s identifikatorom {0} ne postoji", id);
                     PendingUser();
                     return;
                 }
 
-                Console.WriteLine("\n| {0, -36} | {1, -7} | {2, -20} | {3, -20} | {4, -10} | {5, -17} |", "ID", "Naziv", "Datum polaska", "Datum dolaska", "Udaljenost", "Vrijeme putovanja");
-                Console.WriteLine("| {0, -36} | {1, -7} | {2, -20} | {3, -20} | {4, -10:F2} | {5, -17} |\n", flight.Id, flight.Number, flight.DepartureTime, flight.ArrivalTime, (flight.Distance + "km"), (flight.Duration.Hours + "h " + flight.Duration.Minutes + "min"));
+                Console.WriteLine("\n{0, -42} {1, -8} {2, -24} {3, -24} {4, -16} {5, -24} {6, -16} {7}", "ID", "Naziv", "Datum polaska", "Datum dolaska", "Udaljenost", "Vrijeme putovanja", "Avion", "Posada");
+                Console.WriteLine("{0, -42} {1, -8} {2, -24} {3, -24} {4, -16:F2} {5, -24} {6, -16} {7}", flight.Id, flight.Number, flight.DepartureTime, flight.ArrivalTime, (flight.Distance + "km"), (flight.Duration.Hours + "h " + flight.Duration.Minutes + "min"), flight.Airplane.Name, flight.Aircrew.Name);
 
                 PendingUser();
 
@@ -404,13 +414,20 @@ namespace Internship_3_OOP
 
             while (true)
             {
-                Console.Write("Odaberite let(ove) (unesite puni naziv): ");
+                Console.Write("Odaberite let(ove) (unesite puni naziv ili ostavite prazno za prekid): ");
 
                 string? number = Console.ReadLine();
 
-                if (string.IsNullOrEmpty(number) || !Helper.IsFlightNumberValid(number))
+                if (string.IsNullOrEmpty(number))
                 {
-                    Console.WriteLine("Unos nije valjan\n");
+                    Console.WriteLine("Proces pretraživanja je prekinut");
+                    PendingUser();
+                    return;
+                }
+
+                if (!Helper.IsFlightNumberValid(number))
+                {
+                    Console.WriteLine("Unos nije valjan");
                     continue;
                 }
 
@@ -423,11 +440,11 @@ namespace Internship_3_OOP
                     return;
                 }
 
-                Console.WriteLine("\n| {0, -36} | {1, -7} | {2, -20} | {3, -20} | {4, -10} | {5, -17} |", "ID", "Naziv", "Datum polaska", "Datum dolaska", "Udaljenost", "Vrijeme putovanja");
+                Console.WriteLine("\n{0, -42} {1, -8} {2, -24} {3, -24} {4, -16} {5, -24} {6, -16} {7}", "ID", "Naziv", "Datum polaska", "Datum dolaska", "Udaljenost", "Vrijeme putovanja", "Avion", "Posada");
 
                 foreach (var flight in flights)
                 {
-                    Console.WriteLine("| {0, -36} | {1, -7} | {2, -20} | {3, -20} | {4, -10:F2} | {5, -17} |", flight.Id, flight.Number, flight.DepartureTime, flight.ArrivalTime, (flight.Distance + "km"), (flight.Duration.Hours + "h " + flight.Duration.Minutes + "min"));
+                    Console.WriteLine("{0, -42} {1, -8} {2, -24} {3, -24} {4, -16:F2} {5, -24} {6, -16} {7}", flight.Id, flight.Number, flight.DepartureTime, flight.ArrivalTime, (flight.Distance + "km"), (flight.Duration.Hours + "h " + flight.Duration.Minutes + "min"), flight.Airplane.Name, flight.Aircrew.Name);
                 }
 
                 Console.WriteLine("");
@@ -436,6 +453,107 @@ namespace Internship_3_OOP
 
                 return;
             }
+        }
+
+        static void EditFlight()
+        {
+            Console.WriteLine("\nUREĐIVANJE POSTOJEĆEG LETA\n");
+
+            while (true)
+            {
+                Console.Write("Odaberite let (unesite ID ili ostavite prazno za prekid): ");
+
+                string? input = Console.ReadLine();
+
+                if (string.IsNullOrEmpty(input))
+                {
+                    Console.WriteLine("Proces uređivanja je prekinut");
+                    PendingUser();
+                    return;
+                }
+
+                if (!Guid.TryParse(input, out Guid id))
+                {
+                    Console.WriteLine("Unos nije valjan\n");
+                    continue;
+                }
+
+                Flight? flight = Flight.Flights.Find(a => a.Id == id);
+
+                if (flight == null)
+                {
+                    Console.WriteLine("Let s identifikatorom {0} ne postoji", id);
+                    PendingUser();
+                    return;
+                }
+
+                DateTime departure_time, arrival_time;
+                Aircrew aircrew;
+
+                Console.Write("\nŽelite li promijeniti datum i vrijeme polaska? (DA/NE) ");
+
+                if (Helper.CheckInput())
+                {
+                    departure_time = Helper.ValidateDateTime("polaska");
+                }
+
+                else { departure_time = flight.DepartureTime; }
+
+                Console.Write("Želite li promijeniti datum i vrijeme dolaska? (DA/NE) ");
+
+                if (Helper.CheckInput())
+                {
+                    arrival_time = Helper.ValidateDateTime("dolaska");
+                }
+
+                else { arrival_time = flight.ArrivalTime; }
+
+                Console.Write("Želite li promijeniti posadu? (DA/NE) ");
+
+                if (Helper.CheckInput())
+                {
+                    aircrew = Helper.ValidateAircrew();
+                }
+
+                else { aircrew = flight.Aircrew; }
+
+                if ((departure_time == flight.DepartureTime) && (arrival_time == flight.ArrivalTime) && (aircrew == flight.Aircrew))
+                {
+                    Console.WriteLine("Nema nikakvih promjena");
+                    PendingUser();
+                    return;
+                }
+
+                ConfirmEditFlight(flight, departure_time, arrival_time, aircrew);
+
+                return;
+            }
+        }
+
+        static void ConfirmEditFlight(Flight flight, DateTime departure_time, DateTime arrival_time, Aircrew aircrew)
+        {
+            Console.Write("\nZelite li dovrsiti proces uredivanje leta {0}? (DA/NE) ", flight.Number);
+
+            if (Helper.CheckInput())
+            {
+                flight.DepartureTime = departure_time;
+                flight.ArrivalTime = arrival_time;
+                flight.Aircrew = aircrew;
+                flight.Duration = arrival_time - departure_time;
+
+                Console.WriteLine("Proces uredivanja leta {0} je dovrsen\n", flight.Number);
+                Console.WriteLine("{0, -42} {1, -8} {2, -24} {3, -24} {4, -16} {5, -24} {6, -16} {7}", "ID", "Naziv", "Datum polaska", "Datum dolaska", "Udaljenost", "Vrijeme putovanja", "Avion", "Posada");
+                Console.WriteLine("{0, -42} {1, -8} {2, -24} {3, -24} {4, -16:F2} {5, -24} {6, -16} {7}", flight.Id, flight.Number, flight.DepartureTime, flight.ArrivalTime, (flight.Distance + "km"), (flight.Duration.Hours + "h " + flight.Duration.Minutes + "min"), flight.Airplane.Name, flight.Aircrew.Name);
+            }
+
+            else
+            {
+                Console.WriteLine("Proces uredivanja leta {0} je prekinut\n", flight.Number);
+            }
+
+            PendingUser();
+
+            return;
         }
 
         static void ShowAirplanes()
