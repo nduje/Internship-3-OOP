@@ -236,18 +236,21 @@ namespace Internship_3_OOP.Classes
         {
             while (true)
             {
-                Console.Write("Unesite datum {0} (npr. 01.01.2025.): ", type);
+                Console.Write("Unesite datum {0} (npr. 01.01.2026.): ", type);
 
-                if (DateOnly.TryParseExact(Console.ReadLine() ?? "", "dd.MM.yyyy.", out DateOnly date))
-                {
-                    Console.WriteLine("");
-                    return date;
-                }
-
-                else
+                if (!DateOnly.TryParseExact(Console.ReadLine() ?? "", "dd.MM.yyyy.", out DateOnly date))
                 {
                     Console.WriteLine("Neispravan format datuma\n");
+                    continue;
                 }
+
+                if (date < DateOnly.FromDateTime(DateTime.Now))
+                {
+                    Console.WriteLine("Datum {0} ne može biti u prošlosti\n");
+                    continue;
+                }
+
+                return date;
             }
         }
 
@@ -479,7 +482,7 @@ namespace Internship_3_OOP.Classes
             }
         }
 
-        public static Member ValidateCopilot()
+        public static Member? ValidateCopilot()
         {
             List<Member> assigned_copilots = new List<Member>(Aircrew.Aircrews.SelectMany(a => a.Members)).Where(m => m.Role == Enums.Roles.Copilot).ToList();
 
@@ -605,7 +608,7 @@ namespace Internship_3_OOP.Classes
             }
         }
 
-        public static Aircrew ValidateAircrew()
+        public static Aircrew? ValidateAircrew()
         {
             List<Aircrew> unavailable_aircrews = new List<Aircrew>(Flight.Flights.Select(a => a.Aircrew)).ToList();
 
@@ -673,5 +676,19 @@ namespace Internship_3_OOP.Classes
 
             else return false;
         }
+
+        public static void PendingUser()
+        {
+            Console.Write("\nPritisnite bilo koju tipku za nastavak... ");
+            Console.ReadKey(true);
+            Console.Clear();
+        }
+
+        public static void UnavailableCrewMessage()
+        {
+            Console.WriteLine("Proces kreiranja nove posade je prekinut\n");
+            PendingUser();
+        }
+
     }
 }
