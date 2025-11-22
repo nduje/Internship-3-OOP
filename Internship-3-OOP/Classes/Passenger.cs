@@ -75,6 +75,29 @@ namespace Internship_3_OOP.Classes
             return;
         }
 
+        public static void ShowReservedFlights()
+        {
+            Console.WriteLine("\nPRIKAZ SVIH LETOVA\n");
+
+            List<Flight>? flights = SignedPassenger?.Flights.ToList();
+
+            if (flights == null || flights.Count == 0)
+            {
+                Console.WriteLine("Ne postoji niti jedan rezervirani let");
+                Helper.PendingUser();
+                return;
+            }
+
+            Console.WriteLine("{0, -42} {1, -8} {2, -24} {3, -24} {4, -16} {5, -24} {6, -16} {7}", "ID", "Naziv", "Datum polaska", "Datum dolaska", "Udaljenost", "Vrijeme putovanja", "Avion", "Posada");
+
+            foreach (var flight in flights)
+            {
+                Console.WriteLine("{0, -42} {1, -8} {2, -24} {3, -24} {4, -16:F2} {5, -24} {6, -16} {7}", flight.Id, flight.Number, flight.DepartureTime, flight.ArrivalTime, (flight.Distance + "km"), (flight.Duration.Hours + "h " + flight.Duration.Minutes + "min"), flight.Airplane.Name, flight.Aircrew.Name);
+            }
+
+            Helper.PendingUser();
+        }
+
         public static void ReserveFlight()
         {
             Flight? flight = Helper.ValidateAvailableFlight();

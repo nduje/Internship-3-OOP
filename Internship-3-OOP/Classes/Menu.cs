@@ -81,6 +81,7 @@ namespace Internship_3_OOP.Classes
                 switch (choice)
                 {
                     case '1':
+                        Passenger.ShowReservedFlights();
                         break;
                     case '2':
                         Passenger.ReserveFlight();
