@@ -137,6 +137,95 @@ namespace Internship_3_OOP.Classes
             return;
         }
 
+        public static void SearchReservedFlightById()
+        {
+            Console.WriteLine("\nPRETRAŽIVANJE REZERVIRANOG LETA PO IDENTIFIKATORU\n");
+
+            while (true)
+            {
+                Console.Write("Odaberite let (unesite ID ili ostavite prazno za prekid): ");
+
+                string? input = Console.ReadLine();
+
+                if (string.IsNullOrEmpty(input))
+                {
+                    Console.WriteLine("Proces pretraživanja je prekinut");
+                    Helper.PendingUser();
+                    return;
+                }
+
+                if (!Guid.TryParse(input, out Guid id))
+                {
+                    Console.WriteLine("Unos nije valjan\n");
+                    continue;
+                }
+
+                Flight? flight = SignedPassenger?.Flights.Find(a => a.Id == id);
+
+                if (flight == null)
+                {
+
+                    Console.WriteLine("\nLet s identifikatorom {0} ne postoji", id);
+                    Helper.PendingUser();
+                    return;
+                }
+
+                Console.WriteLine("\n{0, -42} {1, -8} {2, -24} {3, -24} {4, -16} {5, -24} {6, -16} {7}", "ID", "Naziv", "Datum polaska", "Datum dolaska", "Udaljenost", "Vrijeme putovanja", "Avion", "Posada");
+                Console.WriteLine("{0, -42} {1, -8} {2, -24} {3, -24} {4, -16:F2} {5, -24} {6, -16} {7}", flight.Id, flight.Number, flight.DepartureTime, flight.ArrivalTime, (flight.Distance + "km"), (flight.Duration.Hours + "h " + flight.Duration.Minutes + "min"), flight.Airplane.Name, flight.Aircrew.Name);
+
+                Helper.PendingUser();
+
+                return;
+            }
+        }
+
+        public static void SearchReservedFlightByName()
+        {
+            Console.WriteLine("\nPRETRAŽIVANJE REZERVIRANOG LETA PO NAZIVU\n");
+
+            while (true)
+            {
+                Console.Write("Odaberite let(ove) (unesite puni naziv ili ostavite prazno za prekid): ");
+
+                string? number = Console.ReadLine();
+
+                if (string.IsNullOrEmpty(number))
+                {
+                    Console.WriteLine("Proces pretraživanja je prekinut");
+                    Helper.PendingUser();
+                    return;
+                }
+
+                if (!Helper.IsFlightNumberValid(number))
+                {
+                    Console.WriteLine("Unos nije valjan");
+                    continue;
+                }
+
+                List<Flight>? flights = SignedPassenger?.Flights.Where(a => a.Number == number).ToList();
+
+                if (flights == null || flights.Count == 0)
+                {
+                    Console.WriteLine("\nLet s nazivom {0} ne postoji", number);
+                    Helper.PendingUser();
+                    return;
+                }
+
+                Console.WriteLine("\n{0, -42} {1, -8} {2, -24} {3, -24} {4, -16} {5, -24} {6, -16} {7}", "ID", "Naziv", "Datum polaska", "Datum dolaska", "Udaljenost", "Vrijeme putovanja", "Avion", "Posada");
+
+                foreach (var flight in flights)
+                {
+                    Console.WriteLine("{0, -42} {1, -8} {2, -24} {3, -24} {4, -16:F2} {5, -24} {6, -16} {7}", flight.Id, flight.Number, flight.DepartureTime, flight.ArrivalTime, (flight.Distance + "km"), (flight.Duration.Hours + "h " + flight.Duration.Minutes + "min"), flight.Airplane.Name, flight.Aircrew.Name);
+                }
+
+                Console.WriteLine("");
+
+                Helper.PendingUser();
+
+                return;
+            }
+        }
+
         public static void CancelFlight()
         {
             Flight? flight = Helper.ValidateReservedFlight();
@@ -144,6 +233,13 @@ namespace Internship_3_OOP.Classes
             if (flight == null)
             {
                 Console.WriteLine("Proces rezervacije je prekinut");
+                Helper.PendingUser();
+                return;
+            }
+
+            if (flight.DepartureTime < DateTime.Now.AddHours(24))
+            {
+                Console.WriteLine("Nije moguće otkazati let koji polijeće unutar 24 sata");
                 Helper.PendingUser();
                 return;
             }

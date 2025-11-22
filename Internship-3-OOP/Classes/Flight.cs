@@ -13,7 +13,6 @@
         public Aircrew Aircrew { get; set; }
         public List<Passenger> Passengers { get; set; }
 
-
         public Flight(string number, DateTime departureTime, DateTime arrivalTime, double distance, Airplane airplane, Aircrew aircrew)
         {
             Id = Guid.NewGuid();
@@ -118,7 +117,7 @@
                 if (flight == null)
                 {
 
-                    Console.WriteLine("Let s identifikatorom {0} ne postoji", id);
+                    Console.WriteLine("\nLet s identifikatorom {0} ne postoji", id);
                     Helper.PendingUser();
                     return;
                 }
@@ -159,7 +158,7 @@
 
                 if (flights.Count == 0)
                 {
-                    Console.WriteLine("Let s nazivom {0} ne postoji\n", number);
+                    Console.WriteLine("\nLet s nazivom {0} ne postoji", number);
                     Helper.PendingUser();
                     return;
                 }

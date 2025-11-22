@@ -87,11 +87,37 @@ namespace Internship_3_OOP.Classes
                         Passenger.ReserveFlight();
                         break;
                     case '3':
+                        ChooseFromReservedFlightsMenu();
                         break;
                     case '4':
                         Passenger.CancelFlight();
                         break;
                     case '5':
+                        return;
+                    default:
+                        Console.WriteLine("Unos nije valjan");
+                        break;
+                }
+            }
+        }
+
+        public static void ChooseFromReservedFlightsMenu()
+        {
+            while (true)
+            {
+                Console.Write("\nPretraživanje letova:\na - Po ID-u\nb - Po nazivu\n\nOdabir: ");
+
+                char choice = Console.ReadKey().KeyChar;
+
+                Console.WriteLine("");
+
+                switch (choice)
+                {
+                    case 'a':
+                        Passenger.SearchReservedFlightById();
+                        return;
+                    case 'b':
+                        Passenger.SearchReservedFlightByName();
                         return;
                     default:
                         Console.WriteLine("Unos nije valjan");
