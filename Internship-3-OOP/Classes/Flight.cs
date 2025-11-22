@@ -11,6 +11,7 @@
         public static List<Flight> Flights = new List<Flight>();
         public Airplane Airplane { get; set; }
         public Aircrew Aircrew { get; set; }
+        public List<Passenger> Passengers { get; set; }
 
 
         public Flight(string number, DateTime departureTime, DateTime arrivalTime, double distance, Airplane airplane, Aircrew aircrew)
@@ -23,6 +24,7 @@
             Duration = CalculateDuration();
             Airplane = airplane;
             Aircrew = aircrew;
+            Passengers = new List<Passenger>();
         }
 
         private TimeSpan CalculateDuration()

@@ -1,4 +1,5 @@
 ﻿using Internship_3_OOP.Classes;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -128,6 +129,7 @@ namespace Internship_3_OOP
                         EditFlight();
                         break;
                     case '5':
+                        DeleteFlight();
                         break;
                     case '6':
                         return;
@@ -556,6 +558,80 @@ namespace Internship_3_OOP
             return;
         }
 
+        static void DeleteFlight()
+        {
+            Console.WriteLine("\nBRISANJE POSTOJEĆEG LETA\n");
+
+            while (true)
+            {
+                Console.Write("Odaberite let (unesite ID ili ostavite prazno za prekid): ");
+
+                string? input = Console.ReadLine();
+
+                if (string.IsNullOrEmpty(input))
+                {
+                    Console.WriteLine("Proces uređivanja je prekinut");
+                    PendingUser();
+                    return;
+                }
+
+                if (!Guid.TryParse(input, out Guid id))
+                {
+                    Console.WriteLine("Unos nije valjan\n");
+                    continue;
+                }
+
+                Flight? flight = Flight.Flights.Find(a => a.Id == id);
+
+                if (flight == null)
+                {
+                    Console.WriteLine("Let s identifikatorom {0} ne postoji", id);
+                    PendingUser();
+                    return;
+                }
+
+                if (flight.Passengers.Count > flight.Airplane.Capacity / 2)
+                {
+                    Console.WriteLine("\nPopunjeno je vise od 50% kapaciteta leta\nProces brisanja leta {0} je prekinut", flight.Number);
+                    PendingUser();
+                    return;
+                }
+
+                if (flight.DepartureTime < DateTime.Now.AddHours(24))
+                {
+                    Console.WriteLine("\nVrijeme polaska je za manje od 24 sata\nProces brisanja leta {0} je prekinut", flight.Number);
+                    PendingUser();
+                    return;
+                }
+
+                ConfirmDeleteFlight(flight);
+
+                return;
+            }
+        }
+
+        static void ConfirmDeleteFlight(Flight flight)
+        {
+            Console.Write("\nZelite li dovrsiti proces brisanja leta {0}? (DA/NE) ", flight.Number);
+
+            string number = flight.Number;
+
+            if (Helper.CheckInput())
+            {
+                Flight.Flights.Remove(flight);
+                Console.WriteLine("Proces brisanja leta {0} je dovrsen", number);
+            }
+
+            else
+            {
+                Console.WriteLine("Proces brisanja leta {0} je prekinut", flight.Number);
+            }
+
+            PendingUser();
+
+            return;
+        }
+
         static void ShowAirplanes()
         {
             Console.WriteLine("\n{0, -42} {1, -16} {2, -24} {3}", "ID", "Naziv", "Godina proizvodnje", "Broj letova");
@@ -575,17 +651,18 @@ namespace Internship_3_OOP
             string name = Helper.ValidateAirplaneName();
             DateOnly production_year = Helper.ValidateDate("proizvodnje");
             int total_flights = Helper.ValidateTotalFlights();
+            int capacity = Helper.ValidateCapacity();
 
-            AddNewAirplane(name, production_year, total_flights);
+            AddNewAirplane(name, production_year, total_flights, capacity);
         }
 
-        static void AddNewAirplane(string name, DateOnly production_year, int total_flights)
+        static void AddNewAirplane(string name, DateOnly production_year, int total_flights, int capacity)
         {
             Console.Write("Zelite li dovrsiti proces dodavanja aviona {0}? (DA/NE) ", name);
 
             if (Helper.CheckInput())
             {
-                Airplane.Airplanes.Add(new Airplane(name, production_year, total_flights));
+                Airplane.Airplanes.Add(new Airplane(name, production_year, total_flights, capacity));
                 Console.WriteLine("Proces dodavanja aviona {0} je dovrsen\n", name);
             }
 

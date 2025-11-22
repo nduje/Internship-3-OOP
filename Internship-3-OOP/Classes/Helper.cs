@@ -16,16 +16,16 @@ namespace Internship_3_OOP.Classes
 
         private static void InitializeFlights()
         {
-            Flight.Flights.Add(new Flight("LH256", new DateTime(2025, 11, 19, 14, 30, 0), new DateTime(2025, 11, 19, 18, 45, 0), 1200, Airplane.Airplanes[0], Aircrew.Aircrews[0]));
-            Flight.Flights.Add(new Flight("AA100", new DateTime(2025, 11, 20, 9, 0, 0), new DateTime(2025, 11, 20, 11, 30, 0), 800, Airplane.Airplanes[1], Aircrew.Aircrews[1]));
+            Flight.Flights.Add(new Flight("LH256", new DateTime(2026, 11, 19, 14, 30, 0), new DateTime(2026, 11, 19, 18, 45, 0), 1200, Airplane.Airplanes[0], Aircrew.Aircrews[0]));
+            Flight.Flights.Add(new Flight("AA100", new DateTime(2026, 11, 20, 9, 0, 0), new DateTime(2026, 11, 20, 11, 30, 0), 800, Airplane.Airplanes[1], Aircrew.Aircrews[1]));
         }
 
         private static void InitializeAirplanes()
         {
-            Airplane.Airplanes.Add(new Airplane("Boeing 737", new DateOnly(2015, 6, 12), 1200));
-            Airplane.Airplanes.Add(new Airplane("Boeing 737", new DateOnly(2012, 3, 6), 1200));
-            Airplane.Airplanes.Add(new Airplane("Airbus A320", new DateOnly(2018, 3, 25), 950));
-            Airplane.Airplanes.Add(new Airplane("Embraer E195", new DateOnly(2020, 11, 5), 600));
+            Airplane.Airplanes.Add(new Airplane("Boeing 737", new DateOnly(2015, 6, 12), 1200, 50));
+            Airplane.Airplanes.Add(new Airplane("Boeing 737", new DateOnly(2012, 3, 6), 1200, 50));
+            Airplane.Airplanes.Add(new Airplane("Airbus A320", new DateOnly(2018, 3, 25), 950, 20));
+            Airplane.Airplanes.Add(new Airplane("Embraer E195", new DateOnly(2020, 11, 5), 600, 5));
         }
 
         private static void InitializeMembers()
@@ -360,6 +360,30 @@ namespace Internship_3_OOP.Classes
             }
         }
 
+        public static int ValidateCapacity()
+        {
+            while (true)
+            {
+                Console.Write("Unesite kapacitet aviona: ");
+
+                if (!int.TryParse(Console.ReadLine(), out int capacity))
+                {
+                    Console.WriteLine("Unos nije valjan\n");
+                    continue;
+                }
+
+                if (capacity < 0)
+                {
+                    Console.WriteLine("Broj ne može negativan broj\n");
+                    continue;
+                }
+
+
+                Console.WriteLine("");
+                return capacity;
+            }
+        }
+
         public static Enums.Genders ValidateGender()
         {
             while (true)
@@ -413,7 +437,7 @@ namespace Internship_3_OOP.Classes
             }
         }
 
-        public static Member ValidatePilot()
+        public static Member? ValidatePilot()
         {
             List<Member> assigned_pilots = new List<Member>(Aircrew.Aircrews.SelectMany(a => a.Members)).Where(m => m.Role == Enums.Roles.Pilot).ToList();
 
@@ -497,7 +521,7 @@ namespace Internship_3_OOP.Classes
             }
         }
 
-        public static Member ValidateAttendant(List<Member> selected)
+        public static Member? ValidateAttendant(List<Member> selected)
         {
             List<Member> assigned_attendants = new List<Member>(Aircrew.Aircrews.SelectMany(a => a.Members)).Where(m => m.Role == Enums.Roles.Attendant).ToList();
 
@@ -539,7 +563,7 @@ namespace Internship_3_OOP.Classes
             }
         }
 
-        public static Airplane ValidateAirplane()
+        public static Airplane? ValidateAirplane()
         {
             List<Airplane> unavailable_airplanes = new List<Airplane>(Flight.Flights.Select(a => a.Airplane)).ToList();
 
